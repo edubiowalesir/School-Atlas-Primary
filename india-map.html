@@ -123,15 +123,6 @@
 
 <div class="map-wrap">
 
-  <!-- Kashmir notice -->
-  <div class="border-notice">
-    <span class="bn-icon">🇮🇳</span>
-    <span><strong>Official Position of the Government of India:</strong>
-    Jammu &amp; Kashmir (including Pakistan-Occupied Kashmir / POK), Gilgit-Baltistan, and Aksai Chin
-    are integral and inalienable parts of India.
-    <strong style="color:#856404;"> • जम्मू-कश्मीर, पाक-अधिकृत कश्मीर (POK), गिलगित-बाल्टिस्तान और अक्साई चिन भारत के अभिन्न अंग हैं।</strong></span>
-  </div>
-
   <!-- Search -->
   <div class="map-search-wrap" id="isearch-wrap">
     <span class="search-icon">🔍</span>
@@ -279,11 +270,10 @@ const AKSAI_CHIN_COORDS = [
   [34.85, 77.90]
 ];
 
-// Boundary line only — no fill, just marks India's official territory boundary
+// Boundary line only — no fill, no dots
 L.polygon(POK_COORDS, {
-  color: '#c0392b',        // solid red boundary line
-  weight: 2.2,
-  fillOpacity: 0           // no fill — just the boundary line
+  color: '#c0392b', weight: 2.2,
+  fillOpacity: 0, lineCap: 'butt', lineJoin: 'miter'
 }).addTo(map).bindPopup(`
   <div style="font-family:'Baloo 2',sans-serif;min-width:210px;">
     <div style="background:#0B6E4F;color:white;padding:9px 13px;border-radius:6px 6px 0 0;font-weight:800;font-size:.95rem;">
@@ -298,11 +288,10 @@ L.polygon(POK_COORDS, {
     </div>
   </div>`, { maxWidth: 250 });
 
-// Aksai Chin boundary line only — no fill
+// Aksai Chin boundary line only — no fill, no dots
 L.polygon(AKSAI_CHIN_COORDS, {
-  color: '#c0392b',        // same red boundary line — consistent with POK
-  weight: 2.2,
-  fillOpacity: 0           // no fill — just the boundary line
+  color: '#c0392b', weight: 2.2,
+  fillOpacity: 0, lineCap: 'butt', lineJoin: 'miter'
 }).addTo(map).bindPopup(`
   <div style="font-family:'Baloo 2',sans-serif;min-width:210px;">
     <div style="background:#0B6E4F;color:white;padding:9px 13px;border-radius:6px 6px 0 0;font-weight:800;font-size:.95rem;">
@@ -330,8 +319,6 @@ const STATES = [
   ["Haryana","हरियाणा","Chandigarh","चंडीगढ़","North","Haryana shares its capital Chandigarh with Punjab — both use the same city!",29.0588,76.0856],
   ["Himachal Pradesh","हिमाचल प्रदेश","Shimla","शिमला","North","Shimla was the summer capital of British India. It still has a famous toy train!",31.1048,77.1734],
   ["Uttarakhand","उत्तराखंड","Dehradun","देहरादून","North","Uttarakhand is called 'Dev Bhoomi' (Land of Gods). The Ganga originates here!",30.3165,78.0322],
-  ["Jammu & Kashmir","जम्मू और कश्मीर","Srinagar (S) / Jammu (W)","श्रीनगर / जम्मू","North","Kashmir is known as 'Paradise on Earth' — famous for its lakes, gardens & houseboats!",33.7782,76.5762],
-  ["Ladakh (UT)","लद्दाख","Leh","लेह","North","Ladakh is the highest plateau in India! It has the world's highest motorable roads.",34.2268,77.5619],
   ["Rajasthan","राजस्थान","Jaipur","जयपुर","North","Rajasthan is the largest state in India by area! Called 'Land of Kings'.",26.9124,75.7873],
   // Central
   ["Madhya Pradesh","मध्य प्रदेश","Bhopal","भोपाल","Central","MP is called the 'Heart of India' — it lies in the exact centre of the country!",23.2599,77.4126],
