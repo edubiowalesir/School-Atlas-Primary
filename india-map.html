@@ -254,6 +254,83 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r
 }).addTo(map);
 
 // ═══════════════════════════════════════════════════════════
+// KASHMIR — INDIA'S OFFICIAL TERRITORY (solid fill, no hatching)
+// As per Government of India's official position:
+// J&K including POK, Gilgit-Baltistan & Aksai Chin = integral part of India
+// ═══════════════════════════════════════════════════════════
+
+// POK region: Azad Kashmir + Gilgit-Baltistan
+// Shown as solid Indian territory — same as any other Indian state
+const POK_COORDS = [
+  [37.10, 73.30], [37.28, 74.40], [37.05, 75.15], [36.75, 75.80],
+  [36.55, 76.55], [36.10, 76.75], [35.70, 76.92], [35.20, 76.60],
+  [34.85, 76.35], [34.55, 76.10], [34.20, 75.55], [33.95, 74.90],
+  [33.60, 74.40], [33.25, 73.95], [32.95, 73.60], [33.15, 73.25],
+  [33.55, 73.00], [33.90, 72.70], [34.30, 72.40], [34.75, 72.10],
+  [35.15, 71.90], [35.60, 71.80], [36.10, 71.95], [36.60, 72.30],
+  [37.00, 72.90], [37.10, 73.30]
+];
+
+// Aksai Chin: part of Ladakh UT — India's official territory
+const AKSAI_CHIN_COORDS = [
+  [34.85, 77.90], [35.15, 78.60], [35.45, 79.30], [35.62, 80.25],
+  [35.40, 80.55], [34.90, 80.30], [34.50, 79.90], [34.05, 79.40],
+  [33.70, 78.80], [33.40, 78.20], [33.65, 77.80], [34.20, 77.65],
+  [34.85, 77.90]
+];
+
+// Solid fill — same visual treatment as Indian states, no hatching, no dashes
+L.polygon(POK_COORDS, {
+  color: '#b35900',        // solid border (dark saffron)
+  weight: 1.5,
+  fillColor: '#FF9933',    // India saffron — clearly Indian territory
+  fillOpacity: 0.38
+}).addTo(map).bindPopup(`
+  <div style="font-family:'Baloo 2',sans-serif;min-width:210px;">
+    <div style="background:#0B6E4F;color:white;padding:9px 13px;border-radius:6px 6px 0 0;font-weight:800;font-size:.95rem;">
+      🇮🇳 Jammu & Kashmir (POK Region)
+    </div>
+    <div style="padding:9px 13px;font-size:.82rem;line-height:1.5;">
+      <strong>Part of:</strong> Union Territory of Jammu &amp; Kashmir &amp; Ladakh<br>
+      <strong>Includes:</strong> Azad Kashmir &amp; Gilgit-Baltistan<br><br>
+      <span style="color:#0B6E4F;font-weight:700;">As per Government of India's official position,
+      this is an integral and inalienable part of India.</span><br><br>
+      <span style="color:#888;font-size:.76rem;">पाक-अधिकृत कश्मीर — भारत का अभिन्न अंग</span>
+    </div>
+  </div>`, { maxWidth: 250 });
+
+// Aksai Chin — solid fill same as Ladakh UT color
+L.polygon(AKSAI_CHIN_COORDS, {
+  color: '#1a5276',        // solid border (dark blue — Ladakh theme)
+  weight: 1.5,
+  fillColor: '#5dade2',    // light blue — part of Ladakh UT
+  fillOpacity: 0.38
+}).addTo(map).bindPopup(`
+  <div style="font-family:'Baloo 2',sans-serif;min-width:210px;">
+    <div style="background:#0B6E4F;color:white;padding:9px 13px;border-radius:6px 6px 0 0;font-weight:800;font-size:.95rem;">
+      🇮🇳 Aksai Chin — Ladakh (UT)
+    </div>
+    <div style="padding:9px 13px;font-size:.82rem;line-height:1.5;">
+      <strong>Part of:</strong> Union Territory of Ladakh, India<br><br>
+      <span style="color:#0B6E4F;font-weight:700;">As per Government of India's official position,
+      Aksai Chin is an integral and inalienable part of India's Ladakh UT.</span><br><br>
+      <span style="color:#888;font-size:.76rem;">अक्साई चिन — भारत के लद्दाख का अभिन्न अंग</span>
+    </div>
+  </div>`, { maxWidth: 250 });
+
+// Small 🇮🇳 info markers in each region so students know these are India's territory
+const indiaIcon = L.divIcon({
+  html: `<div style="background:white;border:2px solid #FF9933;border-radius:6px;padding:2px 6px;font-size:.68rem;font-weight:800;color:#b35900;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.3);">🇮🇳 India (POK)</div>`,
+  className: '', iconAnchor: [45, 12], popupAnchor: [0, -14]
+});
+const aksaiIcon = L.divIcon({
+  html: `<div style="background:white;border:2px solid #2980b9;border-radius:6px;padding:2px 6px;font-size:.68rem;font-weight:800;color:#1a5276;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.3);">🇮🇳 Aksai Chin (India)</div>`,
+  className: '', iconAnchor: [55, 12], popupAnchor: [0, -14]
+});
+L.marker([35.00, 73.80], { icon: indiaIcon }).addTo(map);
+L.marker([34.70, 79.20], { icon: aksaiIcon }).addTo(map);
+
+// ═══════════════════════════════════════════════════════════
 // STATES & UTs markers
 // ═══════════════════════════════════════════════════════════
 
@@ -556,80 +633,3 @@ const CITIES = [
   { name:"Chennai", pop:"11M+", lat:13.0827, lng:80.2707, note:"Gateway to South India — automobile hub and classical arts." },
   { name:"Hyderabad", pop:"10M+", lat:17.3850, lng:78.4867, note:"City of Pearls — famous for Biryani, Charminar, IT & pharma." },
   { name:"Pune", pop:"7M+", lat:18.5204, lng:73.8567, note:"Oxford of the East — education and automobile manufacturing." },
-  { name:"Ahmedabad", pop:"8M+", lat:23.0225, lng:72.5714, note:"Largest city in Gujarat — textile and diamond trading hub." },
-  { name:"Jaipur", pop:"4M+", lat:26.9124, lng:75.7873, note:"Pink City of India — famous for forts, palaces & gemstones." },
-  { name:"Lucknow", pop:"4M+", lat:26.8467, lng:80.9462, note:"City of Nawabs — famous for Biryani, Kebabs and Chikankari embroidery." },
-  { name:"Varanasi", pop:"1.5M+", lat:25.3176, lng:82.9739, note:"Oldest living city in the world! Sacred city on the banks of the Ganga." },
-  { name:"Amritsar", pop:"1.2M+", lat:31.6340, lng:74.8723, note:"Home of the Golden Temple — the holiest shrine of the Sikh faith." },
-];
-
-const cityLayerGroup = L.layerGroup();
-let citiesVisible = false;
-
-CITIES.forEach(c => {
-  const icon = L.divIcon({
-    html: `<div style="background:#8e44ad;color:white;font-size:.62rem;font-weight:800;padding:2px 5px;border-radius:4px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.4);">🏙️ ${c.name}</div>`,
-    className: '', iconAnchor: [30, 12], popupAnchor: [0, -14]
-  });
-  L.marker([c.lat, c.lng], { icon })
-    .bindPopup(`<div style="font-family:'Baloo 2',sans-serif;">
-      <div style="font-weight:800;color:#8e44ad;font-size:.95rem;margin-bottom:4px;">🏙️ ${c.name}</div>
-      <div style="font-size:.8rem;color:#555;margin-bottom:4px;">Population: ~${c.pop}</div>
-      <div style="font-size:.78rem;color:#444;line-height:1.4;">${c.note}</div>
-    </div>`, { maxWidth: 220 })
-    .addTo(cityLayerGroup);
-});
-
-function toggleCities(btn) {
-  citiesVisible = !citiesVisible;
-  btn.classList.toggle('active', citiesVisible);
-  if (citiesVisible) cityLayerGroup.addTo(map);
-  else map.removeLayer(cityLayerGroup);
-}
-
-// ═══════════════════════════════════════════════════════════
-// FLY TO REGION
-// ═══════════════════════════════════════════════════════════
-
-function flyReg(lat, lng, zoom, btn) {
-  map.flyTo([lat, lng], zoom, { duration: 1.2 });
-  document.querySelectorAll('.mbtn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-}
-
-// ═══════════════════════════════════════════════════════════
-// SEARCH
-// ═══════════════════════════════════════════════════════════
-
-function handleStateSearch(val) {
-  const q = val.trim().toLowerCase();
-  const dd = document.getElementById('state-dropdown');
-  if (!q) { dd.classList.remove('open'); return; }
-  const matches = STATES.filter(([n, h]) => n.toLowerCase().includes(q) || h.includes(q));
-  if (!matches.length) { dd.classList.remove('open'); return; }
-  dd.innerHTML = matches.slice(0,6).map(([n, h, cap, cH, region]) => {
-    const col = regionColors[region] || '#0B6E4F';
-    return `<div class="sd-item" onmousedown="selectState('${n}')">
-      <span style="width:10px;height:10px;background:${col};border-radius:50%;display:inline-block;flex-shrink:0;"></span>
-      <span>${n}</span>
-      <span style="color:var(--text-light);font-size:.76rem;margin-left:auto;">${region}</span>
-    </div>`;
-  }).join('');
-  dd.classList.add('open');
-}
-
-function selectState(name) {
-  const s = stateMarkers[name];
-  if (!s) return;
-  document.getElementById('state-search').value = name;
-  document.getElementById('state-dropdown').classList.remove('open');
-  map.flyTo([s.lat, s.lng], 7, { duration: 1.3 });
-  setTimeout(() => s.m.openPopup(), 1400);
-}
-
-function closeStateDd() {
-  setTimeout(() => document.getElementById('state-dropdown').classList.remove('open'), 200);
-}
-</script>
-</body>
-</html>
