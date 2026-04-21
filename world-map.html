@@ -7,11 +7,91 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
-    #wmap { height: 540px; }
-    .leaflet-popup-content b { color: #0B6E4F; font-size: 1rem; }
-    .leaflet-popup-content .hin { color: #FF6B35; font-size: 0.85rem; }
-    .leaflet-popup-content .pop-row { font-size: 0.82rem; margin-top: 4px; }
-    .leaflet-popup-content .fun { font-style: italic; font-size: 0.78rem; color: #555; margin-top:6px; }
+    #wmap { height: 560px; border-radius: 0 0 var(--radius) var(--radius); }
+
+    /* ── Search bar ── */
+    .map-search-wrap { position: relative; margin-bottom: 10px; }
+    .map-search-wrap input {
+      width: 100%; padding: 10px 16px 10px 40px;
+      border: 2px solid #ddd; border-radius: 10px;
+      font-family: inherit; font-size: .92rem; outline: none;
+      transition: border-color .2s;
+    }
+    .map-search-wrap input:focus { border-color: var(--primary-light); }
+    .search-icon {
+      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      font-size: 1rem; pointer-events: none;
+    }
+    .search-dropdown {
+      position: absolute; z-index: 2000; background: white;
+      border-radius: 10px; box-shadow: var(--shadow-hover);
+      width: 100%; max-height: 210px; overflow-y: auto;
+      border: 1px solid #eee; display: none;
+    }
+    .search-dropdown.open { display: block; }
+    .sd-item {
+      padding: 9px 16px; cursor: pointer; font-size: .88rem;
+      display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .sd-item:hover { background: #e8f5e9; }
+
+    /* ── Stats chips ── */
+    .stat-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .chip {
+      background: white; border-radius: 20px; padding: 5px 14px;
+      font-size: .8rem; font-weight: 700; box-shadow: var(--shadow);
+      color: var(--text); cursor: default;
+    }
+    .chip.clickable { cursor: pointer; transition: background .2s; }
+    .chip.clickable:hover { background: var(--primary); color: white; }
+    .chip.active { background: var(--primary); color: white; }
+
+    /* ── Popup ── */
+    .leaflet-popup-content { min-width: 210px; padding: 0; }
+    .wpop {
+      font-family: 'Baloo 2', sans-serif;
+    }
+    .wpop-top {
+      display: flex; align-items: center; gap: 10px;
+      background: #f0f9f4; padding: 10px 14px 8px;
+      border-radius: 6px 6px 0 0;
+    }
+    .wpop-flag { font-size: 2.2rem; line-height: 1; }
+    .wpop-name { font-size: 1rem; font-weight: 800; color: #0B6E4F; line-height: 1.2; }
+    .wpop-cont { font-size: .72rem; color: #7F8C8D; font-weight: 600; margin-top: 2px; }
+    .wpop-body { padding: 8px 14px 10px; }
+    .wpop-row { font-size: .83rem; margin: 4px 0; display: flex; align-items: center; gap: 6px; }
+    .wpop-fact {
+      font-size: .78rem; color: #444; font-style: italic;
+      background: #fff8e7; padding: 6px 9px; border-radius: 6px;
+      margin-top: 8px; border-left: 3px solid #FFD93D;
+      line-height: 1.4;
+    }
+
+    /* ── Random button ── */
+    .random-btn {
+      background: var(--orange); color: white; border: none;
+      border-radius: 8px; padding: 8px 18px; font-family: inherit;
+      font-size: .88rem; font-weight: 700; cursor: pointer;
+      transition: opacity .2s; margin-bottom: 10px;
+    }
+    .random-btn:hover { opacity: .88; }
+
+    /* ── Country count badge ── */
+    .ccount { font-size:.8rem; color: var(--text-light); margin-left:auto; }
+
+    /* ── Info panel below map ── */
+    .info-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+      gap: 12px; margin-top: 20px;
+    }
+    .info-card {
+      background: white; border-radius: 12px; padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+    .info-card strong { display: block; margin-bottom: 4px; }
+    .info-card span { font-size: .82rem; color: var(--text-light); line-height: 1.4; }
   </style>
 </head>
 <body>
@@ -23,61 +103,113 @@
       <div><h1>School Atlas</h1><span class="sub">विद्यालय एटलस • Classes 1–5</span></div>
     </a>
     <nav class="main-nav">
-      <a href="index.html"        class="nav-link">🏠 Home</a>
-      <a href="world-map.html"    class="nav-link active">🌍 World Map</a>
-      <a href="india-map.html"    class="nav-link">🇮🇳 India Map</a>
-      <a href="flags.html"        class="nav-link">🚩 Flags</a>
-      <a href="capitals.html"     class="nav-link">🏛️ Capitals</a>
-      <a href="rivers.html"       class="nav-link">🌊 Rivers</a>
-      <a href="solar-system.html" class="nav-link">🪐 Solar System</a>
+      <a href="index.html"         class="nav-link">🏠 Home</a>
+      <a href="world-map.html"     class="nav-link active">🌍 World Map</a>
+      <a href="india-map.html"     class="nav-link">🇮🇳 India Map</a>
+      <a href="flags.html"         class="nav-link">🚩 Flags</a>
+      <a href="capitals.html"      class="nav-link">🏛️ Capitals</a>
+      <a href="rivers.html"        class="nav-link">🌊 Rivers</a>
+      <a href="solar-system.html"  class="nav-link">🪐 Solar System</a>
       <a href="seven-wonders.html" class="nav-link">🗿 7 Wonders</a>
-      <a href="quiz.html"         class="nav-link">🧩 Quiz</a>
+      <a href="quiz.html"          class="nav-link">🧩 Quiz</a>
     </nav>
   </div>
 </header>
 
 <div class="page-header">
-  <h2>🌍 World Map</h2>
-  <p class="hin">विश्व मानचित्र</p>
-  <p>Click on any country marker to learn more! • किसी भी देश पर क्लिक करें!</p>
+  <h2>🌍 World Map — Interactive</h2>
+  <p>Click any country flag to learn its capital, continent & a fun fact!</p>
 </div>
 
 <div class="map-wrap">
-  <div class="map-btns">
-    <button class="mbtn active" onclick="flyTo(20,0,2,'All')">🌐 All</button>
-    <button class="mbtn" onclick="flyTo(30,80,3,'Asia')">🌏 Asia</button>
-    <button class="mbtn" onclick="flyTo(55,15,3,'Europe')">🌍 Europe</button>
-    <button class="mbtn" onclick="flyTo(5,20,3,'Africa')">🌍 Africa</button>
-    <button class="mbtn" onclick="flyTo(45,-100,3,'N. America')">🌎 N. America</button>
-    <button class="mbtn" onclick="flyTo(-20,-60,3,'S. America')">🌎 S. America</button>
-    <button class="mbtn" onclick="flyTo(-25,135,4,'Australia')">🌏 Australia</button>
-  </div>
-  <div id="wmap"></div>
-  <div class="map-tip">💡 <strong>Tip:</strong> Click on a 📍 marker to see country name, capital, flag and a fun fact! | किसी मार्कर पर क्लिक करें।</div>
 
-  <!-- Oceans Reference -->
-  <div style="margin-top:20px;">
-    <p class="sec-title" style="margin-top:0">🌊 Five Oceans • पाँच महासागर</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:12px;">
-      <div style="background:white;border-radius:10px;padding:14px;box-shadow:var(--shadow);border-left:4px solid #3498db;">
-        <strong>Pacific Ocean</strong><br><span style="color:var(--orange);font-size:.85rem;">प्रशांत महासागर</span><br>
-        <span style="font-size:.8rem;color:var(--text-light);">Largest ocean • 30% of Earth</span>
+  <!-- Search -->
+  <div class="map-search-wrap" id="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="country-search" placeholder="Search for a country… e.g. Japan, Brazil, Egypt"
+           autocomplete="off" oninput="handleSearch(this.value)" onblur="closeDropdown()" onfocus="if(this.value)handleSearch(this.value)">
+    <div class="search-dropdown" id="search-dropdown"></div>
+  </div>
+
+  <!-- Stats + Random -->
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+    <button class="random-btn" onclick="randomCountry()">🎲 Surprise Me!</button>
+    <div class="stat-chips" id="stat-chips">
+      <span class="chip active clickable" data-cont="All"    onclick="filterContinent(this)">🌐 All (50)</span>
+      <span class="chip clickable" data-cont="Asia"          onclick="filterContinent(this)">🌏 Asia</span>
+      <span class="chip clickable" data-cont="Europe"        onclick="filterContinent(this)">🌍 Europe</span>
+      <span class="chip clickable" data-cont="Africa"        onclick="filterContinent(this)">🌍 Africa</span>
+      <span class="chip clickable" data-cont="N. America"    onclick="filterContinent(this)">🌎 N.America</span>
+      <span class="chip clickable" data-cont="S. America"    onclick="filterContinent(this)">🌎 S.America</span>
+      <span class="chip clickable" data-cont="Australia"     onclick="filterContinent(this)">🌏 Oceania</span>
+    </div>
+  </div>
+
+  <!-- Continent fly-to buttons -->
+  <div class="map-btns">
+    <button class="mbtn active" id="btn-all"   onclick="flyTo(20,0,2,'All',this)">🌐 All</button>
+    <button class="mbtn"                        onclick="flyTo(30,80,3,'Asia',this)">🌏 Asia</button>
+    <button class="mbtn"                        onclick="flyTo(55,15,3,'Europe',this)">🌍 Europe</button>
+    <button class="mbtn"                        onclick="flyTo(5,20,3,'Africa',this)">🌍 Africa</button>
+    <button class="mbtn"                        onclick="flyTo(45,-100,3,'N. America',this)">🌎 N.America</button>
+    <button class="mbtn"                        onclick="flyTo(-20,-60,3,'S. America',this)">🌎 S.America</button>
+    <button class="mbtn"                        onclick="flyTo(-25,135,4,'Australia',this)">🌏 Oceania</button>
+  </div>
+
+  <div id="wmap"></div>
+  <div class="map-tip">💡 <strong>Tip:</strong> Click any 🏳️ flag marker to see details • Use <strong>Search</strong> or <strong>Continent</strong> buttons to filter • Try <strong>🎲 Surprise Me!</strong></div>
+
+  <!-- Oceans & World Facts -->
+  <div style="margin-top:24px;">
+    <p class="sec-title" style="margin-top:0">🌊 Five Oceans of the World</p>
+    <div class="info-grid">
+      <div class="info-card" style="border-left:4px solid #2980b9;">
+        <strong>🌊 Pacific Ocean</strong>
+        <span>Largest ocean — covers 30% of Earth's surface. Deeper than all continents are tall!</span>
       </div>
-      <div style="background:white;border-radius:10px;padding:14px;box-shadow:var(--shadow);border-left:4px solid #2980b9;">
-        <strong>Atlantic Ocean</strong><br><span style="color:var(--orange);font-size:.85rem;">अटलांटिक महासागर</span><br>
-        <span style="font-size:.8rem;color:var(--text-light);">2nd largest • Between Americas &amp; Europe</span>
+      <div class="info-card" style="border-left:4px solid #1a5276;">
+        <strong>🌊 Atlantic Ocean</strong>
+        <span>2nd largest ocean. Lies between the Americas and Europe/Africa.</span>
       </div>
-      <div style="background:white;border-radius:10px;padding:14px;box-shadow:var(--shadow);border-left:4px solid #1a5276;">
-        <strong>Indian Ocean</strong><br><span style="color:var(--orange);font-size:.85rem;">हिंद महासागर</span><br>
-        <span style="font-size:.8rem;color:var(--text-light);">Named after India • Surrounds India</span>
+      <div class="info-card" style="border-left:4px solid #117a65;">
+        <strong>🌊 Indian Ocean</strong>
+        <span>Named after India! Surrounds India on three sides. 3rd largest ocean.</span>
       </div>
-      <div style="background:white;border-radius:10px;padding:14px;box-shadow:var(--shadow);border-left:4px solid #85c1e9;">
-        <strong>Arctic Ocean</strong><br><span style="color:var(--orange);font-size:.85rem;">आर्कटिक महासागर</span><br>
-        <span style="font-size:.8rem;color:var(--text-light);">Smallest &amp; coldest ocean</span>
+      <div class="info-card" style="border-left:4px solid #85c1e9;">
+        <strong>🌊 Arctic Ocean</strong>
+        <span>Smallest and coldest ocean. Covered with ice most of the year.</span>
       </div>
-      <div style="background:white;border-radius:10px;padding:14px;box-shadow:var(--shadow);border-left:4px solid #aed6f1;">
-        <strong>Southern Ocean</strong><br><span style="color:var(--orange);font-size:.85rem;">दक्षिणी महासागर</span><br>
-        <span style="font-size:.8rem;color:var(--text-light);">Around Antarctica</span>
+      <div class="info-card" style="border-left:4px solid #aed6f1;">
+        <strong>🌊 Southern Ocean</strong>
+        <span>Surrounds Antarctica. Recognized as the 5th ocean in year 2000.</span>
+      </div>
+    </div>
+
+    <p class="sec-title" style="margin-top:24px;">🌍 Quick World Facts</p>
+    <div class="info-grid">
+      <div class="info-card" style="border-left:4px solid var(--red);">
+        <strong>🗺️ 7 Continents</strong>
+        <span>Africa, Asia, Europe, North America, South America, Australia, Antarctica</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid var(--blue);">
+        <strong>🌐 195 Countries</strong>
+        <span>193 UN member states + Vatican City + Palestine = 195 total</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid var(--primary);">
+        <strong>🏔️ Highest Mountain</strong>
+        <span>Mount Everest — 8,848 m above sea level (Nepal/China border)</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid var(--orange);">
+        <strong>🔥 Hottest Place</strong>
+        <span>Furnace Creek, Death Valley, USA — recorded 56.7°C (134°F)</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid var(--purple);">
+        <strong>❄️ Coldest Place</strong>
+        <span>Vostok Station, Antarctica — recorded −89.2°C (−128.6°F)</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid var(--gold);">
+        <strong>👥 Most Populous</strong>
+        <span>India is the world's most populous country with over 1.4 billion people</span>
       </div>
     </div>
   </div>
@@ -85,103 +217,191 @@
 
 <footer>
   <p>🎓 Free Educational Atlas for Primary School Students | Classes 1–5</p>
-  <p>निःशुल्क शैक्षिक एटलस | कक्षा 1–5</p>
+  <p>निःशुल्क शैक्षिक एटलस | कक्षा 1–5 | Made with ❤️ for children</p>
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="main.js"></script>
 <script>
-// Country data: [name, hindi, capital, flag, continent, fun fact, lat, lng]
+// ── Country data ──
+// [name, capital, flag, continent, fun_fact, lat, lng]
 const COUNTRIES = [
-  // Asia
-  ["India","भारत","New Delhi","🇮🇳","Asia","India has the most post offices in the world!",20.5937,78.9629],
-  ["China","चीन","Beijing","🇨🇳","Asia","China has the longest wall in the world — the Great Wall!",35.8617,104.1954],
-  ["Japan","जापान","Tokyo","🇯🇵","Asia","Japan has over 6,800 islands!",36.2048,138.2529],
-  ["Russia","रूस","Moscow","🇷🇺","Europe/Asia","Russia is the largest country in the world!",61.5240,105.3188],
-  ["Saudi Arabia","सऊदी अरब","Riyadh","🇸🇦","Asia","Saudi Arabia has the world's largest oil reserves.",23.8859,45.0792],
-  ["Pakistan","पाकिस्तान","Islamabad","🇵🇰","Asia","Pakistan has the world's second largest salt mine.",30.3753,69.3451],
-  ["Bangladesh","बांग्लादेश","Dhaka","🇧🇩","Asia","Bangladesh means 'Land of the Bengali People'.",23.6850,90.3563],
-  ["Sri Lanka","श्रीलंका","Sri Jayawardenepura Kotte","🇱🇰","Asia","Sri Lanka is called the Pearl of the Indian Ocean.",7.8731,80.7718],
-  ["Nepal","नेपाल","Kathmandu","🇳🇵","Asia","Mount Everest, the world's highest peak, is in Nepal!",28.3949,84.1240],
-  ["Afghanistan","अफ़गानिस्तान","Kabul","🇦🇫","Asia","Afghanistan is a landlocked country in Central Asia.",33.9391,67.7100],
-  ["Iran","ईरान","Tehran","🇮🇷","Asia","Iran was once known as Persia.",32.4279,53.6880],
-  ["Iraq","इराक","Baghdad","🇮🇶","Asia","The world's first writing was invented in ancient Iraq (Mesopotamia).",33.2232,43.6793],
-  ["Israel","इज़राइल","Jerusalem","🇮🇱","Asia","The Dead Sea in Israel is the lowest point on Earth.",31.0461,34.8516],
-  ["Turkey","तुर्किया","Ankara","🇹🇷","Asia","Istanbul in Turkey is the only city on two continents!",38.9637,35.2433],
-  ["Thailand","थाईलैंड","Bangkok","🇹🇭","Asia","Thailand means 'Land of the Free'.",15.8700,100.9925],
-  ["Vietnam","वियतनाम","Hanoi","🇻🇳","Asia","Vietnam is shaped like the letter 'S'!",14.0583,108.2772],
-  ["South Korea","दक्षिण कोरिया","Seoul","🇰🇷","Asia","South Korea has the fastest internet in the world!",35.9078,127.7669],
-  ["Indonesia","इंडोनेशिया","Jakarta","🇮🇩","Asia","Indonesia is the world's largest archipelago — 17,000 islands!",0.7893,113.9213],
-  ["Malaysia","मलेशिया","Kuala Lumpur","🇲🇾","Asia","Malaysia is home to some of the world's oldest rainforests.",4.2105,101.9758],
-  ["Philippines","फिलीपींस","Manila","🇵🇭","Asia","The Philippines has over 7,000 islands!",12.8797,121.7740],
-  ["UAE","यूएई","Abu Dhabi","🇦🇪","Asia","The UAE has the world's tallest building — Burj Khalifa!",23.4241,53.8478],
-  // Europe
-  ["United Kingdom","यूनाइटेड किंगडम","London","🇬🇧","Europe","The UK invented the sport of football (soccer)!",55.3781,-3.4360],
-  ["France","फ्रांस","Paris","🇫🇷","Europe","France is the most visited country in the world!",46.2276,2.2137],
-  ["Germany","जर्मनी","Berlin","🇩🇪","Europe","Germany is famous for the Christmas market tradition.",51.1657,10.4515],
-  ["Italy","इटली","Rome","🇮🇹","Europe","Italy is shaped like a boot!",41.8719,12.5674],
-  ["Spain","स्पेन","Madrid","🇪🇸","Europe","Spain has the world's oldest restaurant — El Sobrino de Botín.",40.4637,-3.7492],
-  ["Greece","ग्रीस","Athens","🇬🇷","Europe","The Olympic Games started in ancient Greece!",39.0742,21.8243],
-  ["Netherlands","नीदरलैंड","Amsterdam","🇳🇱","Europe","The Netherlands is below sea level in many places!",52.1326,5.2913],
-  ["Sweden","स्वीडन","Stockholm","🇸🇪","Europe","Sweden invented the zipper and the safety match!",60.1282,18.6435],
-  ["Norway","नॉर्वे","Oslo","🇳🇴","Europe","Norway has the Northern Lights — Aurora Borealis!",60.4720,8.4689],
-  ["Switzerland","स्विट्ज़रलैंड","Bern","🇨🇭","Europe","Switzerland has 4 official languages!",46.8182,8.2275],
-  // Africa
-  ["Egypt","मिस्र","Cairo","🇪🇬","Africa","Egypt is home to the ancient Pyramids and the Sphinx!",26.8206,30.8025],
-  ["Nigeria","नाइजीरिया","Abuja","🇳🇬","Africa","Nigeria is the most populous country in Africa.",9.0820,8.6753],
-  ["South Africa","दक्षिण अफ्रीका","Pretoria","🇿🇦","Africa","South Africa has 11 official languages!",30.5595,22.9375],
-  ["Kenya","केन्या","Nairobi","🇰🇪","Africa","Kenya is home to the great Maasai Mara wildlife reserve.",0.0236,37.9062],
-  ["Ethiopia","इथियोपिया","Addis Ababa","🇪🇹","Africa","Ethiopia is the only African country never colonised.",9.1450,40.4897],
-  ["Morocco","मोरक्को","Rabat","🇲🇦","Africa","Morocco is the closest African country to Europe.",31.7917,-7.0926],
-  ["Ghana","घाना","Accra","🇬🇭","Africa","Ghana was the first sub-Saharan African country to gain independence.",7.9465,-1.0232],
-  ["Tanzania","तंजानिया","Dodoma","🇹🇿","Africa","Mount Kilimanjaro, Africa's highest peak, is in Tanzania.",6.3690,34.8888],
-  // Americas
-  ["United States","संयुक्त राज्य अमेरिका","Washington D.C.","🇺🇸","N. America","The USA has 50 states!",37.0902,-95.7129],
-  ["Canada","कनाडा","Ottawa","🇨🇦","N. America","Canada has the most lakes in the world!",56.1304,-106.3468],
-  ["Mexico","मेक्सिको","Mexico City","🇲🇽","N. America","Mexico City is built on an ancient Aztec lake!",23.6345,-102.5528],
-  ["Brazil","ब्राजील","Brasília","🇧🇷","S. America","Brazil has the Amazon Rainforest — the world's largest rainforest!",14.2350,-51.9253],
-  ["Argentina","अर्जेंटीना","Buenos Aires","🇦🇷","S. America","Argentina is the 8th largest country in the world.",38.4161,-63.6167],
-  ["Peru","पेरू","Lima","🇵🇪","S. America","The ancient Inca civilisation was in Peru — Machu Picchu is here!",9.1900,-75.0152],
-  ["Colombia","कोलम्बिया","Bogotá","🇨🇴","S. America","Colombia is named after Christopher Columbus.",4.5709,-74.2973],
-  ["Chile","चिली","Santiago","🇨🇱","S. America","Chile is the world's longest country — 4,300 km long!",35.6751,-71.5430],
-  // Oceania & others
-  ["Australia","ऑस्ट्रेलिया","Canberra","🇦🇺","Australia","Australia is the world's smallest continent and largest island!",25.2744,133.7751],
-  ["New Zealand","न्यूजीलैंड","Wellington","🇳🇿","Australia","New Zealand was the first country to give women the right to vote!",40.9006,174.8860],
+  // ── Asia ──
+  ["India","New Delhi","🇮🇳","Asia","India has the most post offices in the world! It also invented the number zero.",20.5937,78.9629],
+  ["China","Beijing","🇨🇳","Asia","China invented paper, printing, gunpowder, and the compass — the four great inventions!",35.8617,104.1954],
+  ["Japan","Tokyo","🇯🇵","Asia","Japan has over 6,800 islands and is home to Mount Fuji!",36.2048,138.2529],
+  ["Russia","Moscow","🇷🇺","Europe/Asia","Russia is the largest country in the world — it spans 11 time zones!",61.5240,105.3188],
+  ["Saudi Arabia","Riyadh","🇸🇦","Asia","Saudi Arabia holds about 17% of the world's oil reserves.",23.8859,45.0792],
+  ["Pakistan","Islamabad","🇵🇰","Asia","Pakistan has the world's second largest salt mine — Khewra Salt Mine.",30.3753,69.3451],
+  ["Bangladesh","Dhaka","🇧🇩","Asia","Bangladesh means 'Land of the Bengali People'.",23.6850,90.3563],
+  ["Sri Lanka","Colombo","🇱🇰","Asia","Sri Lanka is called the Pearl of the Indian Ocean.",7.8731,80.7718],
+  ["Nepal","Kathmandu","🇳🇵","Asia","Mount Everest, the world's highest peak at 8,848 m, is in Nepal!",28.3949,84.1240],
+  ["Afghanistan","Kabul","🇦🇫","Asia","Afghanistan means 'Land of Afghans'. It is a landlocked country.",33.9391,67.7100],
+  ["Iran","Tehran","🇮🇷","Asia","Iran was once known as Persia, one of the oldest civilisations.",32.4279,53.6880],
+  ["Iraq","Baghdad","🇮🇶","Asia","The world's first writing system was invented in ancient Iraq (Mesopotamia)!",33.2232,43.6793],
+  ["Israel","Jerusalem","🇮🇱","Asia","The Dead Sea in Israel is the lowest point on Earth — 430 m below sea level.",31.0461,34.8516],
+  ["Turkey","Ankara","🇹🇷","Asia","Istanbul, Turkey is the only city in the world that lies on two continents!",38.9637,35.2433],
+  ["Thailand","Bangkok","🇹🇭","Asia","Thailand means 'Land of the Free'. It was never colonised by Europeans!",15.8700,100.9925],
+  ["Vietnam","Hanoi","🇻🇳","Asia","Vietnam is shaped like the letter 'S' on the map!",14.0583,108.2772],
+  ["South Korea","Seoul","🇰🇷","Asia","South Korea has the fastest average internet speed in the world!",35.9078,127.7669],
+  ["Indonesia","Jakarta","🇮🇩","Asia","Indonesia is the world's largest archipelago with over 17,500 islands!",0.7893,113.9213],
+  ["Malaysia","Kuala Lumpur","🇲🇾","Asia","Malaysia is home to some of the world's oldest rainforests — 130 million years old!",4.2105,101.9758],
+  ["Philippines","Manila","🇵🇭","Asia","The Philippines has over 7,641 islands!",12.8797,121.7740],
+  ["UAE","Abu Dhabi","🇦🇪","Asia","The UAE has the world's tallest building — Burj Khalifa at 828 metres!",23.4241,53.8478],
+  ["Singapore","Singapore City","🇸🇬","Asia","Singapore is one of only three city-states in the world!",1.3521,103.8198],
+  // ── Europe ──
+  ["United Kingdom","London","🇬🇧","Europe","The UK invented the sport of football (soccer) and the modern Olympics!",55.3781,-3.4360],
+  ["France","Paris","🇫🇷","Europe","France is the most visited country in the world — over 90 million tourists a year!",46.2276,2.2137],
+  ["Germany","Berlin","🇩🇪","Europe","Germany is famous for the Christmas market tradition and for engineering!",51.1657,10.4515],
+  ["Italy","Rome","🇮🇹","Europe","Italy is shaped like a boot on the map! It has more UNESCO sites than any country.",41.8719,12.5674],
+  ["Spain","Madrid","🇪🇸","Europe","Spain has the world's oldest restaurant — El Sobrino de Botín, opened in 1725!",40.4637,-3.7492],
+  ["Greece","Athens","🇬🇷","Europe","The Olympic Games began in ancient Greece over 2,700 years ago!",39.0742,21.8243],
+  ["Netherlands","Amsterdam","🇳🇱","Europe","The Netherlands is below sea level in many areas — protected by huge dykes!",52.1326,5.2913],
+  ["Sweden","Stockholm","🇸🇪","Europe","Sweden invented the zipper, the safety match, and Spotify!",60.1282,18.6435],
+  ["Norway","Oslo","🇳🇴","Europe","Norway has the Northern Lights (Aurora Borealis) in its sky!",60.4720,8.4689],
+  ["Switzerland","Bern","🇨🇭","Europe","Switzerland has 4 official languages: German, French, Italian and Romansh!",46.8182,8.2275],
+  // ── Africa ──
+  ["Egypt","Cairo","🇪🇬","Africa","Egypt is home to the ancient Pyramids of Giza — built over 4,500 years ago!",26.8206,30.8025],
+  ["Nigeria","Abuja","🇳🇬","Africa","Nigeria is the most populous country in Africa with over 220 million people!",9.0820,8.6753],
+  ["South Africa","Pretoria","🇿🇦","Africa","South Africa has 11 official languages — the most of any country!",30.5595,22.9375],
+  ["Kenya","Nairobi","🇰🇪","Africa","Kenya is home to the Great Rift Valley and the Maasai Mara wildlife reserve.",0.0236,37.9062],
+  ["Ethiopia","Addis Ababa","🇪🇹","Africa","Ethiopia is the only African country that was never colonised by Europeans!",9.1450,40.4897],
+  ["Morocco","Rabat","🇲🇦","Africa","Morocco is the closest African country to Europe — separated only by 14 km!",31.7917,-7.0926],
+  ["Ghana","Accra","🇬🇭","Africa","Ghana was the first sub-Saharan African country to gain independence in 1957.",7.9465,-1.0232],
+  ["Tanzania","Dodoma","🇹🇿","Africa","Mount Kilimanjaro, Africa's highest peak at 5,895 m, is in Tanzania.",6.3690,34.8888],
+  // ── Americas ──
+  ["United States","Washington D.C.","🇺🇸","N. America","The USA has 50 states and is the 3rd largest country by area!",37.0902,-95.7129],
+  ["Canada","Ottawa","🇨🇦","N. America","Canada has the most lakes in the world — over 2 million!",56.1304,-106.3468],
+  ["Mexico","Mexico City","🇲🇽","N. America","Mexico City is built on the site of the ancient Aztec capital Tenochtitlan!",23.6345,-102.5528],
+  ["Brazil","Brasília","🇧🇷","S. America","Brazil has the Amazon Rainforest — the world's largest rainforest producing 20% of oxygen!",14.2350,-51.9253],
+  ["Argentina","Buenos Aires","🇦🇷","S. America","Argentina is the 8th largest country in the world!",38.4161,-63.6167],
+  ["Peru","Lima","🇵🇪","S. America","Ancient Machu Picchu, built by the Inca civilisation, is in Peru!",9.1900,-75.0152],
+  ["Colombia","Bogotá","🇨🇴","S. America","Colombia is named after the explorer Christopher Columbus!",4.5709,-74.2973],
+  ["Chile","Santiago","🇨🇱","S. America","Chile is the world's longest country — stretching 4,300 km from north to south!",35.6751,-71.5430],
+  // ── Oceania ──
+  ["Australia","Canberra","🇦🇺","Australia","Australia is the world's smallest continent AND largest island!",25.2744,133.7751],
+  ["New Zealand","Wellington","🇳🇿","Australia","New Zealand was the first country in the world to give women the right to vote (1893)!",40.9006,174.8860],
 ];
 
-// Initialize map
-const map = L.map('wmap').setView([20, 0], 2);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap contributors',
-  maxZoom: 10
+// ── Map init (CartoDB Voyager — English labels globally) ──
+const map = L.map('wmap', { zoomControl: true }).setView([20, 0], 2);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
+  maxZoom: 14,
+  subdomains: 'abcd'
 }).addTo(map);
 
-// Custom marker icon
-function makeIcon(flag) {
+// ── Markers ──
+const markers = {};
+
+function makePopup(name, capital, flag, cont, fact) {
+  return `<div class="wpop">
+    <div class="wpop-top">
+      <span class="wpop-flag">${flag}</span>
+      <div>
+        <div class="wpop-name">${name}</div>
+        <div class="wpop-cont">${cont}</div>
+      </div>
+    </div>
+    <div class="wpop-body">
+      <div class="wpop-row">🏛️ <strong>Capital:</strong>&nbsp;${capital}</div>
+      <div class="wpop-fact">⭐ ${fact}</div>
+    </div>
+  </div>`;
+}
+
+function makeIcon(flag, active) {
+  const shadow = active ? '0 0 0 3px #0B6E4F, 0 2px 8px rgba(0,0,0,.4)' : '0 2px 5px rgba(0,0,0,.35)';
   return L.divIcon({
-    html: `<div style="font-size:1.4rem;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4));">${flag}</div>`,
-    className: '', iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -14]
+    html: `<div style="font-size:1.5rem;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,.3));transform:scale(${active?1.2:1});transition:transform .2s;">${flag}</div>`,
+    className: '', iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -16]
   });
 }
 
-// Add markers
-COUNTRIES.forEach(([name, hindi, capital, flag, cont, fact, lat, lng]) => {
-  L.marker([lat, lng], { icon: makeIcon(flag) })
-   .addTo(map)
-   .bindPopup(`
-     <b>${flag} ${name}</b><br>
-     <span class="hin">${hindi}</span><br>
-     <span class="pop-row">🏛️ Capital: <strong>${capital}</strong></span><br>
-     <span class="pop-row">🌍 Continent: ${cont}</span><br>
-     <span class="fun">⭐ ${fact}</span>
-   `, { maxWidth: 220 });
+COUNTRIES.forEach(([name, capital, flag, cont, fact, lat, lng]) => {
+  const m = L.marker([lat, lng], { icon: makeIcon(flag, false) })
+    .addTo(map)
+    .bindPopup(makePopup(name, capital, flag, cont, fact), { maxWidth: 250, className: 'wpop-wrap' });
+  markers[name] = { marker: m, lat, lng, flag, capital, cont };
 });
 
-// Fly-to function
-function flyTo(lat, lng, zoom, name) {
-  map.flyTo([lat, lng], zoom, { duration: 1.5 });
+// ── Fly-to ──
+function flyTo(lat, lng, zoom, label, btn) {
+  map.flyTo([lat, lng], zoom, { duration: 1.4 });
   document.querySelectorAll('.mbtn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ── Filter by continent ──
+let activeContFilter = 'All';
+function filterContinent(el) {
+  const cont = el.dataset.cont;
+  activeContFilter = cont;
+  document.querySelectorAll('.chip.clickable').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+
+  COUNTRIES.forEach(([name, capital, flag, contry, fact, lat, lng]) => {
+    const m = markers[name].marker;
+    if (cont === 'All' || contry === cont || contry.startsWith(cont)) {
+      map.addLayer(m);
+    } else {
+      map.removeLayer(m);
+    }
+  });
+
+  const flyCoords = {
+    'All': [20,0,2], 'Asia': [30,80,3], 'Europe': [55,15,3],
+    'Africa': [5,20,3], 'N. America': [45,-100,3],
+    'S. America': [-20,-60,3], 'Australia': [-25,135,4]
+  };
+  const fc = flyCoords[cont] || flyCoords['All'];
+  map.flyTo([fc[0], fc[1]], fc[2], { duration: 1.4 });
+}
+
+// ── Random country ──
+function randomCountry() {
+  const c = COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)];
+  const [name, capital, flag, cont, fact, lat, lng] = c;
+  // reset filter to All
+  document.querySelectorAll('.chip.clickable').forEach(ch => ch.classList.remove('active'));
+  document.querySelector('[data-cont="All"]').classList.add('active');
+  COUNTRIES.forEach(([n]) => map.addLayer(markers[n].marker));
+  map.flyTo([lat, lng], 5, { duration: 1.6 });
+  setTimeout(() => markers[name].marker.openPopup(), 1700);
+}
+
+// ── Search ──
+function handleSearch(val) {
+  const q = val.trim().toLowerCase();
+  const dd = document.getElementById('search-dropdown');
+  if (!q) { dd.classList.remove('open'); return; }
+  const matches = COUNTRIES.filter(([n]) => n.toLowerCase().includes(q));
+  if (!matches.length) { dd.classList.remove('open'); return; }
+  dd.innerHTML = matches.slice(0, 8).map(([n, cap, flag, cont]) =>
+    `<div class="sd-item" onmousedown="selectCountry('${n}')">
+       <span>${flag}</span><span>${n}</span>
+       <span style="color:var(--text-light);font-size:.78rem;margin-left:auto;">${cont}</span>
+     </div>`
+  ).join('');
+  dd.classList.add('open');
+}
+
+function selectCountry(name) {
+  const c = markers[name];
+  if (!c) return;
+  document.getElementById('country-search').value = name;
+  document.getElementById('search-dropdown').classList.remove('open');
+  // reset filter
+  document.querySelectorAll('.chip.clickable').forEach(ch => ch.classList.remove('active'));
+  document.querySelector('[data-cont="All"]').classList.add('active');
+  COUNTRIES.forEach(([n]) => map.addLayer(markers[n].marker));
+  map.flyTo([c.lat, c.lng], 5, { duration: 1.4 });
+  setTimeout(() => c.marker.openPopup(), 1500);
+}
+
+function closeDropdown() {
+  setTimeout(() => document.getElementById('search-dropdown').classList.remove('open'), 200);
 }
 </script>
 </body>
