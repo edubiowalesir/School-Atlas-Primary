@@ -354,17 +354,6 @@ L.polygon(AKSAI_CHIN_COORDS, {
     </div>
   </div>`, { maxWidth: 260 });
 
-// Small 🇮🇳 labels inside each region
-const pokLbl = L.divIcon({
-  html: `<div style="background:white;border:2px solid #FF9933;border-radius:5px;padding:2px 6px;font-size:.67rem;font-weight:800;color:#b35900;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.3);">🇮🇳 India (POK)</div>`,
-  className:'', iconAnchor:[44,10], popupAnchor:[0,-12]
-});
-const aksaiLbl = L.divIcon({
-  html: `<div style="background:white;border:2px solid #2980b9;border-radius:5px;padding:2px 6px;font-size:.67rem;font-weight:800;color:#1a5276;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.3);">🇮🇳 Aksai Chin (India)</div>`,
-  className:'', iconAnchor:[55,10], popupAnchor:[0,-12]
-});
-L.marker([35.00, 73.80], { icon: pokLbl }).addTo(map);
-L.marker([34.70, 79.20], { icon: aksaiLbl }).addTo(map);
 
 // ── Markers ──
 const markers = {};
