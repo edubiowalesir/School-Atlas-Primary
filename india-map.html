@@ -7,10 +7,90 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
-    #imap { height: 580px; }
-    .leaflet-popup-content b { color: #0B6E4F; }
-    .leaflet-popup-content .hin { color: #FF6B35; font-size: 0.83rem; }
-    .leaflet-popup-content .prow { font-size: 0.8rem; margin-top: 3px; }
+    #imap { height: 600px; border-radius: 0 0 var(--radius) var(--radius); }
+
+    /* ── Border notice ── */
+    .border-notice {
+      background: #fff3cd; border: 2px solid #ffc107; border-radius: 10px;
+      padding: 10px 16px; margin-bottom: 12px; font-size: .83rem;
+      display: flex; align-items: center; gap: 10px; line-height: 1.4;
+    }
+    .border-notice .bn-icon { font-size: 1.3rem; flex-shrink: 0; }
+
+    /* ── Popup ── */
+    .leaflet-popup-content { min-width: 220px; font-family: 'Baloo 2', sans-serif; }
+    .spop-top {
+      background: linear-gradient(135deg, #0B6E4F, #14A06E);
+      color: white; padding: 10px 14px 8px; border-radius: 6px 6px 0 0;
+    }
+    .spop-name { font-size: 1rem; font-weight: 800; }
+    .spop-hindi { font-size: .82rem; opacity: .85; margin-top: 1px; }
+    .spop-body { padding: 8px 14px 10px; }
+    .spop-row { font-size: .82rem; margin: 4px 0; display: flex; align-items: center; gap: 5px; }
+    .spop-region { font-weight: 700; padding: 1px 8px; border-radius: 10px; color: white; font-size: .75rem; }
+    .spop-fact {
+      font-size: .78rem; font-style: italic; color: #444;
+      background: #fff8e7; padding: 6px 8px; border-radius: 6px;
+      margin-top: 8px; border-left: 3px solid #FFD93D; line-height: 1.4;
+    }
+
+    /* ── Layer toggles ── */
+    .layer-panel {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 12px; align-items: center;
+    }
+    .layer-btn {
+      padding: 6px 14px; border-radius: 20px; border: 2px solid #ddd;
+      background: white; font-family: inherit; font-size: .83rem; font-weight: 700;
+      cursor: pointer; transition: all .2s;
+    }
+    .layer-btn.active { border-color: transparent; color: white; }
+    .layer-btn.river-btn.active  { background: #2980b9; border-color: #2980b9; }
+    .layer-btn.landmark-btn.active { background: #e67e22; border-color: #e67e22; }
+    .layer-btn.city-btn.active   { background: #8e44ad; border-color: #8e44ad; }
+
+    /* ── River sidebar ── */
+    .river-sidebar {
+      background: white; border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 16px; margin-top: 16px; display: none;
+    }
+    .river-sidebar.show { display: block; }
+    .river-sidebar h4 { margin-bottom: 12px; color: var(--primary); font-size: .95rem; }
+    .river-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 8px; }
+    .river-item {
+      padding: 8px 12px; border-radius: 8px; border: 2px solid;
+      cursor: pointer; font-size: .82rem; font-weight: 700;
+      transition: all .2s; background: white;
+    }
+    .river-item:hover { color: white; }
+    .river-item.active { color: white !important; }
+
+    /* ── Search ── */
+    .map-search-wrap { position: relative; margin-bottom: 10px; }
+    .map-search-wrap input {
+      width: 100%; padding: 9px 16px 9px 38px;
+      border: 2px solid #ddd; border-radius: 10px;
+      font-family: inherit; font-size: .88rem; outline: none;
+    }
+    .map-search-wrap input:focus { border-color: var(--primary-light); }
+    .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); }
+    .search-dropdown {
+      position: absolute; z-index: 2000; background: white;
+      border-radius: 10px; box-shadow: var(--shadow-hover);
+      width: 100%; max-height: 200px; overflow-y: auto;
+      border: 1px solid #eee; display: none;
+    }
+    .search-dropdown.open { display: block; }
+    .sd-item { padding: 9px 14px; cursor: pointer; font-size: .86rem;
+               display: flex; align-items: center; gap: 8px;
+               border-bottom: 1px solid #f5f5f5; }
+    .sd-item:hover { background: #e8f5e9; }
+
+    /* ── Info grid ── */
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap: 12px; margin-top: 16px; }
+    .info-card { background: white; border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow); }
+    .info-card strong { display: block; margin-bottom: 4px; }
+    .info-card span { font-size: .82rem; color: var(--text-light); line-height: 1.4; }
   </style>
 </head>
 <body>
@@ -22,166 +102,534 @@
       <div><h1>School Atlas</h1><span class="sub">विद्यालय एटलस • Classes 1–5</span></div>
     </a>
     <nav class="main-nav">
-      <a href="index.html"        class="nav-link">🏠 Home</a>
-      <a href="world-map.html"    class="nav-link">🌍 World Map</a>
-      <a href="india-map.html"    class="nav-link active">🇮🇳 India Map</a>
-      <a href="flags.html"        class="nav-link">🚩 Flags</a>
-      <a href="capitals.html"     class="nav-link">🏛️ Capitals</a>
-      <a href="rivers.html"       class="nav-link">🌊 Rivers</a>
-      <a href="solar-system.html" class="nav-link">🪐 Solar System</a>
+      <a href="index.html"         class="nav-link">🏠 Home</a>
+      <a href="world-map.html"     class="nav-link">🌍 World Map</a>
+      <a href="india-map.html"     class="nav-link active">🇮🇳 India Map</a>
+      <a href="flags.html"         class="nav-link">🚩 Flags</a>
+      <a href="capitals.html"      class="nav-link">🏛️ Capitals</a>
+      <a href="rivers.html"        class="nav-link">🌊 Rivers</a>
+      <a href="solar-system.html"  class="nav-link">🪐 Solar System</a>
       <a href="seven-wonders.html" class="nav-link">🗿 7 Wonders</a>
-      <a href="quiz.html"         class="nav-link">🧩 Quiz</a>
+      <a href="quiz.html"          class="nav-link">🧩 Quiz</a>
     </nav>
   </div>
 </header>
 
 <div class="page-header">
-  <h2>🇮🇳 India Map</h2>
-  <p class="hin">भारत का मानचित्र</p>
-  <p>Click any marker to see state / UT name and capital! • मार्कर पर क्लिक करें!</p>
+  <h2>🇮🇳 India Map — Interactive</h2>
+  <p class="hin">भारत का इंटरेक्टिव मानचित्र</p>
+  <p>Click markers for state info • Toggle Rivers, Landmarks & Cities layers!</p>
 </div>
 
 <div class="map-wrap">
-  <div class="map-btns">
-    <button class="mbtn active" onclick="flyReg(22,80,5,'All India')">🇮🇳 All India</button>
-    <button class="mbtn" onclick="flyReg(28,77,7,'North')">⬆️ North</button>
-    <button class="mbtn" onclick="flyReg(22,80,6,'Central')">🎯 Central</button>
-    <button class="mbtn" onclick="flyReg(13,79,6,'South')">⬇️ South</button>
-    <button class="mbtn" onclick="flyReg(24,86,6,'East')">➡️ East</button>
-    <button class="mbtn" onclick="flyReg(23,72,6,'West')">⬅️ West</button>
-    <button class="mbtn" onclick="flyReg(27,93,6,'Northeast')">🌿 Northeast</button>
-  </div>
-  <div id="imap"></div>
-  <div class="map-tip">💡 Click on 📍 markers to see state name, capital &amp; a fun fact! | मार्कर पर क्लिक करें।</div>
 
-  <!-- India Facts -->
-  <div style="margin-top:22px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
-    <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);border-left:4px solid #FF9933;">
-      <strong>🟠 Saffron in Flag</strong><br><span style="font-size:.83rem;color:var(--text-light);">Stands for courage and sacrifice<br>साहस और बलिदान का प्रतीक</span>
+  <!-- Kashmir notice -->
+  <div class="border-notice">
+    <span class="bn-icon">🇮🇳</span>
+    <span><strong>Official Position of the Government of India:</strong>
+    Jammu &amp; Kashmir (including Pakistan-Occupied Kashmir / POK), Gilgit-Baltistan, and Aksai Chin
+    are integral and inalienable parts of India.
+    <strong style="color:#856404;"> • जम्मू-कश्मीर, पाक-अधिकृत कश्मीर (POK), गिलगित-बाल्टिस्तान और अक्साई चिन भारत के अभिन्न अंग हैं।</strong></span>
+  </div>
+
+  <!-- Search -->
+  <div class="map-search-wrap" id="isearch-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="state-search" placeholder="Search for a state or UT… e.g. Kerala, Punjab"
+           autocomplete="off" oninput="handleStateSearch(this.value)" onblur="closeStateDd()">
+    <div class="search-dropdown" id="state-dropdown"></div>
+  </div>
+
+  <!-- Layer toggle buttons -->
+  <div class="layer-panel">
+    <span style="font-size:.82rem;font-weight:700;color:var(--text-light);">Show Layers:</span>
+    <button class="layer-btn river-btn" id="river-toggle" onclick="toggleRivers(this)">🌊 Rivers</button>
+    <button class="layer-btn landmark-btn" id="landmark-toggle" onclick="toggleLandmarks(this)">🏛️ Landmarks</button>
+    <button class="layer-btn city-btn" id="city-toggle" onclick="toggleCities(this)">🏙️ Major Cities</button>
+  </div>
+
+  <!-- Region fly-to -->
+  <div class="map-btns">
+    <button class="mbtn active" onclick="flyReg(22,80,5,this)">🇮🇳 All India</button>
+    <button class="mbtn"        onclick="flyReg(33,76,6,this)">⬆️ North + J&K</button>
+    <button class="mbtn"        onclick="flyReg(23,80,6,this)">🎯 Central</button>
+    <button class="mbtn"        onclick="flyReg(13,79,6,this)">⬇️ South</button>
+    <button class="mbtn"        onclick="flyReg(24,86,6,this)">➡️ East</button>
+    <button class="mbtn"        onclick="flyReg(23,72,6,this)">⬅️ West</button>
+    <button class="mbtn"        onclick="flyReg(27,93,6,this)">🌿 Northeast</button>
+  </div>
+
+  <div id="imap"></div>
+  <div class="map-tip">💡 Click 📍 state markers for details • Toggle river paths, landmarks & cities above • Use search to jump to any state!</div>
+
+  <!-- River sidebar (shows when Rivers layer is ON) -->
+  <div class="river-sidebar" id="river-sidebar">
+    <h4>🌊 Click a River to Highlight its Path on the Map</h4>
+    <div class="river-list" id="river-list"></div>
+  </div>
+
+  <!-- Info section -->
+  <div style="margin-top:24px;">
+    <p class="sec-title" style="margin-top:0">🇮🇳 India at a Glance</p>
+    <div class="info-grid">
+      <div class="info-card" style="border-left:4px solid #FF9933;">
+        <strong>🏛️ Capital</strong>
+        <span>New Delhi (नई दिल्ली) — on the banks of River Yamuna</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid #138808;">
+        <strong>📊 States &amp; UTs</strong>
+        <span>28 States + 8 Union Territories = 36 total administrative units</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid var(--blue);">
+        <strong>🏔️ Highest Peak</strong>
+        <span>Kangchenjunga — 8,586 m (3rd tallest in the world), Sikkim border</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid var(--red);">
+        <strong>🗓️ Independence Day</strong>
+        <span>15 August 1947 — India gained independence from British rule</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid var(--primary);">
+        <strong>🌊 Longest River</strong>
+        <span>Ganga — 2,525 km, flowing from Gangotri glacier to Bay of Bengal</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid var(--orange);">
+        <strong>🌡️ Climate Zones</strong>
+        <span>India has all major climate zones — tropical, arid, alpine and temperate</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid var(--purple);">
+        <strong>👥 Population</strong>
+        <span>1.4+ billion people — India is the world's most populous country</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid #f1c40f;">
+        <strong>🗣️ Languages</strong>
+        <span>India has 22 officially recognised languages and hundreds of dialects</span>
+      </div>
     </div>
-    <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);border-left:4px solid white;outline:1px solid #eee;">
-      <strong>⚪ White in Flag</strong><br><span style="font-size:.83rem;color:var(--text-light);">Peace and truth • With Ashok Chakra<br>शांति और सत्य • अशोक चक्र के साथ</span>
-    </div>
-    <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);border-left:4px solid #138808;">
-      <strong>🟢 Green in Flag</strong><br><span style="font-size:.83rem;color:var(--text-light);">Faith and prosperity<br>विश्वास और समृद्धि</span>
-    </div>
-    <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);border-left:4px solid #000080;">
-      <strong>🔵 Ashok Chakra</strong><br><span style="font-size:.83rem;color:var(--text-light);">24 spokes — Wheel of Dharma<br>24 तीलियाँ — धर्म चक्र</span>
-    </div>
-    <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);border-left:4px solid var(--primary);">
-      <strong>🏛️ Capital</strong><br><span style="font-size:.83rem;color:var(--text-light);">New Delhi • नई दिल्ली</span>
-    </div>
-    <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);border-left:4px solid var(--orange);">
-      <strong>🗓️ Independence Day</strong><br><span style="font-size:.83rem;color:var(--text-light);">15 August 1947 • 15 अगस्त 1947</span>
-    </div>
-    <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);border-left:4px solid var(--blue);">
-      <strong>📊 States &amp; UTs</strong><br><span style="font-size:.83rem;color:var(--text-light);">28 States + 8 Union Territories<br>28 राज्य + 8 केंद्र शासित प्रदेश</span>
-    </div>
-    <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);border-left:4px solid var(--red);">
-      <strong>🏔️ Highest Peak</strong><br><span style="font-size:.83rem;color:var(--text-light);">Kangchenjunga — 8,586 m<br>कंचनजंगा — 8,586 मीटर</span>
+
+    <!-- National Symbols -->
+    <p class="sec-title" style="margin-top:24px;">🏅 National Symbols of India • राष्ट्रीय प्रतीक</p>
+    <div class="info-grid">
+      <div class="info-card" style="border-left:4px solid #FF9933;">
+        <strong>🐯 National Animal</strong>
+        <span>Bengal Tiger (बाघ) — Project Tiger started in 1973 to protect it</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid #138808;">
+        <strong>🦚 National Bird</strong>
+        <span>Indian Peacock (मोर) — known for its beautiful colourful feathers</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid #3498db;">
+        <strong>🌸 National Flower</strong>
+        <span>Lotus (कमल) — it is the symbol of purity and beauty</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid #27ae60;">
+        <strong>🌳 National Tree</strong>
+        <span>Banyan Tree (बरगद) — also called the 'wish-fulfilling tree'</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid #f39c12;">
+        <strong>🥭 National Fruit</strong>
+        <span>Mango (आम) — India is the largest producer of mangoes in the world!</span>
+      </div>
+      <div class="info-card" style="border-left:4px solid var(--red);">
+        <strong>🦬 National Aquatic Animal</strong>
+        <span>Gangetic River Dolphin (गांगेय डॉल्फिन) — found in the River Ganga</span>
+      </div>
     </div>
   </div>
 </div>
 
 <footer>
   <p>🎓 Free Educational Atlas for Primary School Students | Classes 1–5</p>
-  <p>निःशुल्क शैक्षिक एटलस | कक्षा 1–5</p>
+  <p>निःशुल्क शैक्षिक एटलस | कक्षा 1–5 | Made with ❤️ for children</p>
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="main.js"></script>
 <script>
-// States & UTs: [name, hindi, capital, capital-hindi, region, fun fact, lat, lng]
+// ── Map init ──
+const map = L.map('imap', { zoomControl: true }).setView([22, 80], 5);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
+  maxZoom: 14, subdomains: 'abcd'
+}).addTo(map);
+
+// ═══════════════════════════════════════════════════════════
+// STATES & UTs markers
+// ═══════════════════════════════════════════════════════════
+
+// [name, hindi, capital, capital_hindi, region, fun_fact, lat, lng]
 const STATES = [
   // North
-  ["Uttar Pradesh","उत्तर प्रदेश","Lucknow","लखनऊ","North","UP is the most populous state in India!",27.5706,80.0982],
-  ["Delhi (NCT)","दिल्ली","New Delhi","नई दिल्ली","North","Delhi is the capital of India!",28.6139,77.2090],
-  ["Punjab","पंजाब","Chandigarh","चंडीगढ़","North","Punjab means 'Land of Five Rivers'.",30.7333,76.7794],
-  ["Haryana","हरियाणा","Chandigarh","चंडीगढ़","North","Haryana shares its capital Chandigarh with Punjab.",29.0588,76.0856],
-  ["Himachal Pradesh","हिमाचल प्रदेश","Shimla","शिमला","North","Shimla was the summer capital of British India.",31.1048,77.1734],
-  ["Uttarakhand","उत्तराखंड","Dehradun","देहरादून","North","Uttarakhand is called 'Dev Bhoomi' — Land of Gods!",30.3165,78.0322],
-  ["Jammu & Kashmir","जम्मू और कश्मीर","Srinagar / Jammu","श्रीनगर / जम्मू","North","Kashmir is known as the 'Paradise on Earth'!",33.7782,76.5762],
-  ["Rajasthan","राजस्थान","Jaipur","जयपुर","North","Rajasthan is the largest state in India by area!",26.9124,75.7873],
+  ["Uttar Pradesh","उत्तर प्रदेश","Lucknow","लखनऊ","North","UP is the most populous state in India with over 200 million people!",27.5706,80.0982],
+  ["Delhi (NCT)","दिल्ली (NCT)","New Delhi","नई दिल्ली","North","New Delhi is India's capital and was planned by British architects Lutyens & Baker.",28.6139,77.2090],
+  ["Punjab","पंजाब","Chandigarh","चंडीगढ़","North","Punjab means 'Land of Five Rivers' — Jhelum, Chenab, Ravi, Beas & Sutlej.",30.7333,76.7794],
+  ["Haryana","हरियाणा","Chandigarh","चंडीगढ़","North","Haryana shares its capital Chandigarh with Punjab — both use the same city!",29.0588,76.0856],
+  ["Himachal Pradesh","हिमाचल प्रदेश","Shimla","शिमला","North","Shimla was the summer capital of British India. It still has a famous toy train!",31.1048,77.1734],
+  ["Uttarakhand","उत्तराखंड","Dehradun","देहरादून","North","Uttarakhand is called 'Dev Bhoomi' (Land of Gods). The Ganga originates here!",30.3165,78.0322],
+  ["Jammu & Kashmir","जम्मू और कश्मीर","Srinagar (S) / Jammu (W)","श्रीनगर / जम्मू","North","Kashmir is known as 'Paradise on Earth' — famous for its lakes, gardens & houseboats!",33.7782,76.5762],
+  ["Ladakh (UT)","लद्दाख","Leh","लेह","North","Ladakh is the highest plateau in India! It has the world's highest motorable roads.",34.2268,77.5619],
+  ["Rajasthan","राजस्थान","Jaipur","जयपुर","North","Rajasthan is the largest state in India by area! Called 'Land of Kings'.",26.9124,75.7873],
   // Central
-  ["Madhya Pradesh","मध्य प्रदेश","Bhopal","भोपाल","Central","MP is called the 'Heart of India'!",23.2599,77.4126],
-  ["Chhattisgarh","छत्तीसगढ़","Raipur","रायपुर","Central","Chhattisgarh means 'Thirty-six Forts'.",21.2514,81.6296],
+  ["Madhya Pradesh","मध्य प्रदेश","Bhopal","भोपाल","Central","MP is called the 'Heart of India' — it lies in the exact centre of the country!",23.2599,77.4126],
+  ["Chhattisgarh","छत्तीसगढ़","Raipur","रायपुर","Central","Chhattisgarh means 'Thirty-six Forts'. It was carved out of MP in year 2000.",21.2514,81.6296],
   // East
-  ["Bihar","बिहार","Patna","पटना","East","India's first university — Nalanda — was in Bihar!",25.5941,85.1376],
-  ["Jharkhand","झारखंड","Ranchi","रांची","East","Jharkhand means 'Land of Forests'.",23.3441,85.3096],
-  ["West Bengal","पश्चिम बंगाल","Kolkata","कोलकाता","East","Kolkata was the capital of British India for 138 years!",22.5726,88.3639],
-  ["Odisha","ओडिशा","Bhubaneswar","भुवनेश्वर","East","Odisha has over 500 temples in Bhubaneswar!",20.2961,85.8245],
+  ["Bihar","बिहार","Patna","पटना","East","India's first great university — Nalanda — was in Bihar, founded 2,600 years ago!",25.5941,85.1376],
+  ["Jharkhand","झारखंड","Ranchi","रांची","East","Jharkhand means 'Land of Forests'. It is rich in minerals — coal, iron, copper!",23.3441,85.3096],
+  ["West Bengal","पश्चिम बंगाल","Kolkata","कोलकाता","East","Kolkata was the capital of British India for 138 years! Famous for Durga Puja.",22.5726,88.3639],
+  ["Odisha","ओडिशा","Bhubaneswar","भुवनेश्वर","East","Bhubaneswar is called 'Temple City of India' — it has over 500 ancient temples!",20.2961,85.8245],
   // West
-  ["Maharashtra","महाराष्ट्र","Mumbai","मुंबई","West","Mumbai is the financial capital of India!",19.0760,72.8777],
-  ["Gujarat","गुजरात","Gandhinagar","गांधीनगर","West","Mahatma Gandhi was born in Gujarat.",23.2156,72.6369],
-  ["Goa","गोवा","Panaji","पणजी","West","Goa is the smallest state in India by area!",15.2993,74.1240],
+  ["Maharashtra","महाराष्ट्र","Mumbai","मुंबई","West","Mumbai is the financial capital of India and home to Bollywood — India's film industry!",19.0760,72.8777],
+  ["Gujarat","गुजरात","Gandhinagar","गांधीनगर","West","Mahatma Gandhi, the Father of the Nation, was born in Porbandar, Gujarat!",23.2156,72.6369],
+  ["Goa","गोवा","Panaji","पणजी","West","Goa is the smallest state in India by area. Famous for its beaches and Portuguese heritage!",15.2993,74.1240],
   // South
-  ["Karnataka","कर्नाटक","Bengaluru","बेंगलुरु","South","Bengaluru is known as the Silicon Valley of India!",12.9716,77.5946],
-  ["Tamil Nadu","तमिलनाडु","Chennai","चेन्नई","South","Tamil is one of the world's oldest languages!",13.0827,80.2707],
-  ["Kerala","केरल","Thiruvananthapuram","तिरुवनंतपुरम","South","Kerala has 100% literacy rate!",8.5241,76.9366],
-  ["Andhra Pradesh","आंध्र प्रदेश","Amaravati","अमरावती","South","AP has the longest coastline among all southern states.",16.5062,80.6480],
-  ["Telangana","तेलंगाना","Hyderabad","हैदराबाद","South","Hyderabad is famous for its biryani and the Charminar!",17.3850,78.4867],
+  ["Karnataka","कर्नाटक","Bengaluru","बेंगलुरु","South","Bengaluru is known as India's Silicon Valley — the IT capital of India!",12.9716,77.5946],
+  ["Tamil Nadu","तमिलनाडु","Chennai","चेन्नई","South","Tamil is one of the world's oldest living languages — over 2,000 years old!",13.0827,80.2707],
+  ["Kerala","केरल","Thiruvananthapuram","तिरुवनंतपुरम","South","Kerala has 100% literacy rate! It is called 'God's Own Country'.",8.5241,76.9366],
+  ["Andhra Pradesh","आंध्र प्रदेश","Amaravati","अमरावती","South","Andhra Pradesh has the longest coastline among all southern states — 974 km!",16.5062,80.6480],
+  ["Telangana","तेलंगाना","Hyderabad","हैदराबाद","South","Hyderabad is famous for Biryani, the Charminar and being India's 'City of Pearls'!",17.3850,78.4867],
   // Northeast
-  ["Assam","असम","Dispur","दिसपुर","Northeast","Assam produces 50% of India's tea!",26.1433,91.7898],
-  ["Meghalaya","मेघालय","Shillong","शिलांग","Northeast","Meghalaya means 'Abode of Clouds'!",25.5788,91.8933],
-  ["Nagaland","नागालैंड","Kohima","कोहिमा","Northeast","Nagaland is known for the Hornbill Festival.",25.6751,94.1086],
-  ["Manipur","मणिपुर","Imphal","इम्फाल","Northeast","Manipur is known as the 'Jewel of India'.",24.6637,93.9063],
-  ["Tripura","त्रिपुरा","Agartala","अगरतला","Northeast","Tripura is the third smallest state in India.",23.9408,91.9882],
-  ["Arunachal Pradesh","अरुणाचल प्रदेश","Itanagar","ईटानगर","Northeast","Arunachal Pradesh means 'Land of Dawn-Lit Mountains'!",27.0844,93.6053],
-  ["Mizoram","मिजोरम","Aizawl","आइज़ॉल","Northeast","Mizoram means 'Land of the Highlanders'.",23.7271,92.7176],
-  ["Sikkim","सिक्किम","Gangtok","गंगटोक","Northeast","Sikkim is the least populous state in India.",27.5330,88.5122],
+  ["Assam","असम","Dispur","दिसपुर","Northeast","Assam produces over 50% of India's tea! It is also home to the one-horned rhinoceros.",26.1433,91.7898],
+  ["Meghalaya","मेघालय","Shillong","शिलांग","Northeast","Meghalaya means 'Abode of Clouds'. Mawsynram here is the wettest place on Earth!",25.5788,91.8933],
+  ["Nagaland","नागालैंड","Kohima","कोहिमा","Northeast","Nagaland is known for the Hornbill Festival — 'Festival of Festivals'!",25.6751,94.1086],
+  ["Manipur","मणिपुर","Imphal","इम्फाल","Northeast","Manipur is known as the 'Jewel of India'. It has a floating lake — Loktak Lake!",24.6637,93.9063],
+  ["Tripura","त्रिपुरा","Agartala","अगरतला","Tripura is nearly surrounded by Bangladesh. It is the 3rd smallest state in India.",23.9408,91.9882],
+  ["Arunachal Pradesh","अरुणाचल प्रदेश","Itanagar","ईटानगर","Northeast","Arunachal Pradesh means 'Land of Dawn-Lit Mountains'. It is India's easternmost state!",27.0844,93.6053],
+  ["Mizoram","मिजोरम","Aizawl","आइज़ॉल","Northeast","Mizoram means 'Land of the Highlanders'. It has the highest literacy rate after Kerala!",23.7271,92.7176],
+  ["Sikkim","सिक्किम","Gangtok","गंगटोक","Northeast","Sikkim is the least populous state in India. Kangchenjunga — India's highest peak — is here!",27.5330,88.5122],
 ];
-
-const map = L.map('imap').setView([22, 80], 5);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap contributors', maxZoom: 12
-}).addTo(map);
 
 const regionColors = {
   "North":"#e74c3c","Central":"#f39c12","East":"#3498db",
   "West":"#27ae60","South":"#9b59b6","Northeast":"#1abc9c"
 };
 
-function makeStateIcon(region) {
+function makeStateIcon(region, size) {
   const col = regionColors[region] || '#0B6E4F';
+  const s = size || 13;
   return L.divIcon({
-    html: `<div style="width:12px;height:12px;background:${col};border:2px solid white;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.5);"></div>`,
-    className: '', iconSize: [12, 12], iconAnchor: [6, 6], popupAnchor: [0, -8]
+    html: `<div style="width:${s}px;height:${s}px;background:${col};border:2.5px solid white;border-radius:50%;box-shadow:0 1px 5px rgba(0,0,0,.5);"></div>`,
+    className: '', iconSize: [s,s], iconAnchor: [s/2,s/2], popupAnchor: [0,-s/2-2]
   });
 }
 
+const stateMarkers = {};
 STATES.forEach(([name, hindi, cap, capHin, region, fact, lat, lng]) => {
   const col = regionColors[region] || '#0B6E4F';
-  L.marker([lat, lng], { icon: makeStateIcon(region) })
-   .addTo(map)
-   .bindPopup(`
-     <b>${name}</b><br>
-     <span class="hin">${hindi}</span><br>
-     <span class="prow">🏛️ Capital: <strong>${cap}</strong> (${capHin})</span><br>
-     <span class="prow">📍 Region: <span style="color:${col};font-weight:700;">${region}</span></span><br>
-     <span class="prow" style="font-style:italic;color:#555;font-size:.78rem;">⭐ ${fact}</span>
-   `, { maxWidth: 230 });
+  const m = L.marker([lat, lng], { icon: makeStateIcon(region) })
+    .addTo(map)
+    .bindPopup(`
+      <div style="font-family:'Baloo 2',sans-serif;min-width:220px;">
+        <div class="spop-top" style="background:${col};padding:10px 14px 8px;">
+          <div style="font-size:1rem;font-weight:800;color:white;">${name}</div>
+          <div style="font-size:.82rem;color:rgba(255,255,255,.85);">${hindi}</div>
+        </div>
+        <div style="padding:8px 14px 10px;">
+          <div style="font-size:.82rem;margin:4px 0;">🏛️ <strong>Capital:</strong> ${cap} <span style="color:#888;font-size:.78rem;">(${capHin})</span></div>
+          <div style="font-size:.82rem;margin:4px 0;">📍 <strong>Region:</strong> <span style="color:${col};font-weight:700;">${region}</span></div>
+          <div style="font-size:.78rem;font-style:italic;color:#444;background:#fff8e7;padding:6px 8px;border-radius:6px;margin-top:8px;border-left:3px solid #FFD93D;line-height:1.4;">⭐ ${fact}</div>
+        </div>
+      </div>`, { maxWidth: 250 });
+  stateMarkers[name] = { m, lat, lng, region };
 });
 
-function flyReg(lat, lng, zoom) {
-  map.flyTo([lat, lng], zoom, { duration: 1.2 });
-  document.querySelectorAll('.mbtn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-}
-
-// Legend
+// ── Region legend ──
 const legend = L.control({ position: 'bottomright' });
 legend.onAdd = () => {
   const div = L.DomUtil.create('div', '');
-  div.style.cssText = 'background:white;padding:10px 14px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.15);font-family:Baloo 2,sans-serif;font-size:.78rem;';
-  div.innerHTML = '<strong style="display:block;margin-bottom:6px;">📍 Regions</strong>' +
+  div.style.cssText = 'background:white;padding:10px 14px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.2);font-family:Baloo 2,sans-serif;font-size:.76rem;';
+  div.innerHTML = '<strong style="display:block;margin-bottom:6px;font-size:.8rem;">📍 State Regions</strong>' +
     Object.entries(regionColors).map(([r,c]) =>
-      `<div style="display:flex;align-items:center;gap:6px;margin:2px 0;">
-        <span style="width:10px;height:10px;background:${c};border-radius:50%;display:inline-block;"></span>${r}
-      </div>`
-    ).join('');
+      `<div style="display:flex;align-items:center;gap:6px;margin:3px 0;">
+        <span style="width:11px;height:11px;background:${c};border-radius:50%;display:inline-block;flex-shrink:0;"></span>${r}
+      </div>`).join('');
   return div;
 };
 legend.addTo(map);
+
+// ═══════════════════════════════════════════════════════════
+// RIVER PATHS
+// ═══════════════════════════════════════════════════════════
+
+const RIVERS = [
+  {
+    name: "Ganga", hindi: "गंगा", color: "#2980b9",
+    desc: "Longest river in India • 2,525 km • Source: Gangotri Glacier • Empties into Bay of Bengal",
+    coords: [
+      [30.87,78.93],[30.12,78.28],[29.54,79.00],[29.10,79.55],[28.82,80.00],
+      [27.80,80.55],[27.48,80.90],[26.85,81.15],[26.22,82.00],[25.76,82.55],
+      [25.44,81.88],[25.28,82.60],[25.10,83.20],[25.05,84.05],[25.18,85.12],
+      [25.24,86.10],[25.35,87.00],[24.80,87.85],[23.90,88.52],[22.57,88.38],
+      [21.90,88.15]
+    ]
+  },
+  {
+    name: "Yamuna", hindi: "यमुना", color: "#1abc9c",
+    desc: "Major tributary of Ganga • 1,376 km • Flows through Delhi & Agra (Taj Mahal is on its banks!)",
+    coords: [
+      [30.98,78.47],[30.45,77.98],[29.95,77.71],[29.42,77.60],[28.61,77.22],
+      [27.52,77.68],[27.18,78.05],[26.97,78.36],[26.44,79.02],[26.15,79.47],
+      [25.70,81.00],[25.45,81.85]
+    ]
+  },
+  {
+    name: "Brahmaputra", hindi: "ब्रह्मपुत्र", color: "#16a085",
+    desc: "Flows from Tibet through Assam • 3,848 km total (916 km in India) • Also called Luit in Assam",
+    coords: [
+      [28.22,97.10],[28.00,95.75],[27.70,95.00],[27.35,94.15],[27.10,93.58],
+      [26.85,92.55],[26.55,91.95],[26.08,90.80],[25.90,90.10],[25.62,89.88],
+      [25.45,89.65],[24.75,89.95]
+    ]
+  },
+  {
+    name: "Godavari", hindi: "गोदावरी", color: "#e67e22",
+    desc: "Called 'Dakshin Ganga' • 1,465 km • Longest river in South India • Source: Trimbakeshwar, Nashik",
+    coords: [
+      [19.93,73.58],[19.72,74.12],[19.35,74.80],[18.96,75.30],[18.97,76.10],
+      [18.82,77.30],[18.63,78.22],[17.95,79.38],[17.40,80.48],[16.92,81.15],
+      [16.55,81.75],[16.38,81.88]
+    ]
+  },
+  {
+    name: "Krishna", hindi: "कृष्णा", color: "#8e44ad",
+    desc: "Second longest river in Peninsular India • 1,400 km • Source: Western Ghats near Mahabaleshwar",
+    coords: [
+      [17.72,73.85],[17.40,74.33],[17.30,75.22],[16.84,76.42],[16.58,77.78],
+      [16.60,78.50],[16.57,79.30],[16.10,80.22],[15.88,80.90]
+    ]
+  },
+  {
+    name: "Narmada", hindi: "नर्मदा", color: "#27ae60",
+    desc: "Flows westward through Madhya Pradesh & Gujarat • 1,312 km • Falls into Arabian Sea",
+    coords: [
+      [22.68,81.77],[22.85,80.55],[22.70,79.18],[22.78,78.47],[23.12,77.30],
+      [22.75,76.08],[22.28,75.62],[22.10,74.22],[21.92,73.32],[21.72,72.88],
+      [21.65,72.75]
+    ]
+  },
+  {
+    name: "Indus", hindi: "सिंधु", color: "#f39c12",
+    desc: "One of the longest rivers in Asia • 3,180 km total • Flows through J&K & Ladakh before entering Pakistan",
+    coords: [
+      [34.52,77.58],[34.25,76.82],[33.85,75.88],[33.40,74.50],[33.01,73.80],
+      [32.62,72.05],[31.60,72.35],[30.92,72.18],[29.40,71.25],[28.40,70.50]
+    ]
+  },
+  {
+    name: "Mahanadi", hindi: "महानदी", color: "#d35400",
+    desc: "River of Odisha & Chhattisgarh • 858 km • Hirakud Dam on this river is one of the longest earthen dams!",
+    coords: [
+      [20.28,82.08],[20.30,82.90],[20.45,83.55],[20.92,83.88],[20.65,84.48],
+      [20.45,85.05],[20.38,85.85],[20.22,86.38],[20.17,86.75]
+    ]
+  },
+  {
+    name: "Tapti", hindi: "तापी", color: "#c0392b",
+    desc: "Flows westward parallel to Narmada • 724 km • Falls into Gulf of Khambhat near Surat",
+    coords: [
+      [21.75,77.80],[21.52,77.20],[21.28,76.55],[21.08,75.90],[21.00,75.20],
+      [21.10,74.45],[21.20,73.80],[21.15,72.95],[21.12,72.78]
+    ]
+  }
+];
+
+// Build river layer group
+const riverLayers = {};
+let riverLayerGroup = L.layerGroup();
+let riversVisible = false;
+let activeRiver = null;
+
+RIVERS.forEach(r => {
+  const line = L.polyline(r.coords, {
+    color: r.color, weight: 3, opacity: 0.85,
+    dashArray: null
+  }).bindPopup(`
+    <div style="font-family:'Baloo 2',sans-serif;min-width:200px;">
+      <div style="background:${r.color};color:white;padding:8px 12px;border-radius:6px 6px 0 0;font-weight:800;font-size:.95rem;">
+        🌊 ${r.name} — ${r.hindi}
+      </div>
+      <div style="padding:8px 12px;font-size:.82rem;line-height:1.5;">${r.desc}</div>
+    </div>`, { maxWidth: 240 });
+  riverLayers[r.name] = line;
+  riverLayerGroup.addLayer(line);
+});
+
+// Build river sidebar buttons
+const riverList = document.getElementById('river-list');
+RIVERS.forEach(r => {
+  const btn = document.createElement('div');
+  btn.className = 'river-item';
+  btn.id = 'river-btn-' + r.name;
+  btn.style.borderColor = r.color;
+  btn.style.color = r.color;
+  btn.innerHTML = `🌊 ${r.name} <span style="font-weight:400;font-size:.75rem;display:block;color:#888;">${r.hindi}</span>`;
+  btn.onclick = () => highlightRiver(r.name, r.color);
+  riverList.appendChild(btn);
+});
+
+function highlightRiver(name, color) {
+  // Reset all
+  RIVERS.forEach(r => {
+    riverLayers[r.name].setStyle({ weight: 3, opacity: 0.85, dashArray: null });
+    document.getElementById('river-btn-' + r.name).classList.remove('active');
+    document.getElementById('river-btn-' + r.name).style.background = 'white';
+    document.getElementById('river-btn-' + r.name).style.color = r.color;
+  });
+
+  if (activeRiver === name) {
+    activeRiver = null;
+    return;
+  }
+  activeRiver = name;
+  riverLayers[name].setStyle({ weight: 5, opacity: 1 });
+  document.getElementById('river-btn-' + name).classList.add('active');
+  document.getElementById('river-btn-' + name).style.background = color;
+  document.getElementById('river-btn-' + name).style.color = 'white';
+
+  // Zoom to river bounds
+  map.flyToBounds(riverLayers[name].getBounds().pad(0.3), { duration: 1.2 });
+  setTimeout(() => riverLayers[name].openPopup(), 1300);
+}
+
+function toggleRivers(btn) {
+  riversVisible = !riversVisible;
+  btn.classList.toggle('active', riversVisible);
+  const sidebar = document.getElementById('river-sidebar');
+  if (riversVisible) {
+    riverLayerGroup.addTo(map);
+    sidebar.classList.add('show');
+  } else {
+    map.removeLayer(riverLayerGroup);
+    sidebar.classList.remove('show');
+    activeRiver = null;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// LANDMARKS
+// ═══════════════════════════════════════════════════════════
+
+const LANDMARKS = [
+  { name:"Taj Mahal", emoji:"🕌", lat:27.1751, lng:78.0421, info:"UNESCO World Heritage Site — built 1632–1653 by Emperor Shah Jahan in memory of wife Mumtaz Mahal." },
+  { name:"Red Fort", emoji:"🏯", lat:28.6562, lng:77.2410, info:"Built by Mughal Emperor Shah Jahan in Delhi (1638–48). India's tricolour is hoisted here every Independence Day." },
+  { name:"Qutb Minar", emoji:"🗼", lat:28.5244, lng:77.1855, info:"Tallest minaret in India (72.5 m). Built in 1193 AD by Qutb-ud-din Aibak. UNESCO World Heritage Site." },
+  { name:"Gateway of India", emoji:"⛩️", lat:18.9217, lng:72.8347, info:"Built in 1924 to commemorate the visit of King George V & Queen Mary to Bombay (Mumbai) in 1911." },
+  { name:"India Gate", emoji:"🏛️", lat:28.6129, lng:77.2295, info:"War memorial in New Delhi, dedicated to soldiers of the British Indian Army who died in World War I." },
+  { name:"Mysore Palace", emoji:"🏰", lat:12.3052, lng:76.6552, info:"One of the most visited monuments in India. Residence of the Wadiyar dynasty of Mysore." },
+  { name:"Konark Sun Temple", emoji:"☀️", lat:19.8876, lng:86.0943, info:"Built in the 13th century in the shape of a huge chariot. UNESCO World Heritage Site in Odisha." },
+  { name:"Ajanta Caves", emoji:"🗿", lat:20.5519, lng:75.7033, info:"Rock-cut Buddhist cave monuments from 2nd century BCE to 480 CE — UNESCO World Heritage Site." },
+  { name:"Hawa Mahal", emoji:"🌬️", lat:26.9239, lng:75.8267, info:"'Palace of Winds' in Jaipur — built 1799 — has 953 small windows so royal ladies could watch street life." },
+  { name:"Victoria Memorial", emoji:"👑", lat:22.5448, lng:88.3426, info:"White marble monument in Kolkata built 1906–21 in memory of Queen Victoria. Now a museum." },
+];
+
+const landmarkLayerGroup = L.layerGroup();
+let landmarksVisible = false;
+
+LANDMARKS.forEach(lm => {
+  const icon = L.divIcon({
+    html: `<div style="font-size:1.3rem;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4));">${lm.emoji}</div>`,
+    className: '', iconSize: [26,26], iconAnchor: [13,13], popupAnchor: [0,-15]
+  });
+  L.marker([lm.lat, lm.lng], { icon })
+    .bindPopup(`<div style="font-family:'Baloo 2',sans-serif;min-width:190px;">
+      <div style="font-size:.95rem;font-weight:800;color:#e67e22;margin-bottom:4px;">${lm.emoji} ${lm.name}</div>
+      <div style="font-size:.8rem;line-height:1.4;color:#444;">${lm.info}</div>
+    </div>`, { maxWidth: 230 })
+    .addTo(landmarkLayerGroup);
+});
+
+function toggleLandmarks(btn) {
+  landmarksVisible = !landmarksVisible;
+  btn.classList.toggle('active', landmarksVisible);
+  if (landmarksVisible) landmarkLayerGroup.addTo(map);
+  else map.removeLayer(landmarkLayerGroup);
+}
+
+// ═══════════════════════════════════════════════════════════
+// MAJOR CITIES
+// ═══════════════════════════════════════════════════════════
+
+const CITIES = [
+  { name:"Mumbai", pop:"20M+", lat:19.0760, lng:72.8777, note:"Financial capital of India — Bollywood, stock exchange, largest port city." },
+  { name:"Delhi", pop:"32M+", lat:28.7041, lng:77.1025, note:"National Capital Territory — largest urban area in India." },
+  { name:"Bengaluru", pop:"13M+", lat:12.9716, lng:77.5946, note:"Silicon Valley of India — IT hub, aerospace and research city." },
+  { name:"Kolkata", pop:"15M+", lat:22.5726, lng:88.3639, note:"Cultural capital of India — art, literature, football & Durga Puja." },
+  { name:"Chennai", pop:"11M+", lat:13.0827, lng:80.2707, note:"Gateway to South India — automobile hub and classical arts." },
+  { name:"Hyderabad", pop:"10M+", lat:17.3850, lng:78.4867, note:"City of Pearls — famous for Biryani, Charminar, IT & pharma." },
+  { name:"Pune", pop:"7M+", lat:18.5204, lng:73.8567, note:"Oxford of the East — education and automobile manufacturing." },
+  { name:"Ahmedabad", pop:"8M+", lat:23.0225, lng:72.5714, note:"Largest city in Gujarat — textile and diamond trading hub." },
+  { name:"Jaipur", pop:"4M+", lat:26.9124, lng:75.7873, note:"Pink City of India — famous for forts, palaces & gemstones." },
+  { name:"Lucknow", pop:"4M+", lat:26.8467, lng:80.9462, note:"City of Nawabs — famous for Biryani, Kebabs and Chikankari embroidery." },
+  { name:"Varanasi", pop:"1.5M+", lat:25.3176, lng:82.9739, note:"Oldest living city in the world! Sacred city on the banks of the Ganga." },
+  { name:"Amritsar", pop:"1.2M+", lat:31.6340, lng:74.8723, note:"Home of the Golden Temple — the holiest shrine of the Sikh faith." },
+];
+
+const cityLayerGroup = L.layerGroup();
+let citiesVisible = false;
+
+CITIES.forEach(c => {
+  const icon = L.divIcon({
+    html: `<div style="background:#8e44ad;color:white;font-size:.62rem;font-weight:800;padding:2px 5px;border-radius:4px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.4);">🏙️ ${c.name}</div>`,
+    className: '', iconAnchor: [30, 12], popupAnchor: [0, -14]
+  });
+  L.marker([c.lat, c.lng], { icon })
+    .bindPopup(`<div style="font-family:'Baloo 2',sans-serif;">
+      <div style="font-weight:800;color:#8e44ad;font-size:.95rem;margin-bottom:4px;">🏙️ ${c.name}</div>
+      <div style="font-size:.8rem;color:#555;margin-bottom:4px;">Population: ~${c.pop}</div>
+      <div style="font-size:.78rem;color:#444;line-height:1.4;">${c.note}</div>
+    </div>`, { maxWidth: 220 })
+    .addTo(cityLayerGroup);
+});
+
+function toggleCities(btn) {
+  citiesVisible = !citiesVisible;
+  btn.classList.toggle('active', citiesVisible);
+  if (citiesVisible) cityLayerGroup.addTo(map);
+  else map.removeLayer(cityLayerGroup);
+}
+
+// ═══════════════════════════════════════════════════════════
+// FLY TO REGION
+// ═══════════════════════════════════════════════════════════
+
+function flyReg(lat, lng, zoom, btn) {
+  map.flyTo([lat, lng], zoom, { duration: 1.2 });
+  document.querySelectorAll('.mbtn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════════════════════════
+
+function handleStateSearch(val) {
+  const q = val.trim().toLowerCase();
+  const dd = document.getElementById('state-dropdown');
+  if (!q) { dd.classList.remove('open'); return; }
+  const matches = STATES.filter(([n, h]) => n.toLowerCase().includes(q) || h.includes(q));
+  if (!matches.length) { dd.classList.remove('open'); return; }
+  dd.innerHTML = matches.slice(0,6).map(([n, h, cap, cH, region]) => {
+    const col = regionColors[region] || '#0B6E4F';
+    return `<div class="sd-item" onmousedown="selectState('${n}')">
+      <span style="width:10px;height:10px;background:${col};border-radius:50%;display:inline-block;flex-shrink:0;"></span>
+      <span>${n}</span>
+      <span style="color:var(--text-light);font-size:.76rem;margin-left:auto;">${region}</span>
+    </div>`;
+  }).join('');
+  dd.classList.add('open');
+}
+
+function selectState(name) {
+  const s = stateMarkers[name];
+  if (!s) return;
+  document.getElementById('state-search').value = name;
+  document.getElementById('state-dropdown').classList.remove('open');
+  map.flyTo([s.lat, s.lng], 7, { duration: 1.3 });
+  setTimeout(() => s.m.openPopup(), 1400);
+}
+
+function closeStateDd() {
+  setTimeout(() => document.getElementById('state-dropdown').classList.remove('open'), 200);
+}
 </script>
 </body>
 </html>
