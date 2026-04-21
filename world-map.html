@@ -316,10 +316,10 @@ const AKSAI_CHIN_COORDS = [
   [34.85, 77.90]
 ];
 
-// POK — solid saffron fill (India's flag colour)
+// POK — boundary line only, no fill
 L.polygon(POK_COORDS, {
-  color: '#b35900', weight: 1.5,
-  fillColor: '#FF9933', fillOpacity: 0.38
+  color: '#c0392b', weight: 2.2,
+  fillOpacity: 0
 }).addTo(map).bindPopup(`
   <div class="wpop">
     <div class="wpop-top" style="background:linear-gradient(135deg,#FF9933,#138808);">
@@ -335,10 +335,10 @@ L.polygon(POK_COORDS, {
     </div>
   </div>`, { maxWidth: 260 });
 
-// Aksai Chin — solid blue fill (part of Ladakh UT)
+// Aksai Chin — boundary line only, no fill
 L.polygon(AKSAI_CHIN_COORDS, {
-  color: '#1a5276', weight: 1.5,
-  fillColor: '#5dade2', fillOpacity: 0.38
+  color: '#c0392b', weight: 2.2,
+  fillOpacity: 0
 }).addTo(map).bindPopup(`
   <div class="wpop">
     <div class="wpop-top" style="background:linear-gradient(135deg,#2980b9,#138808);">
