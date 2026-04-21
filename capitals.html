@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capitals | School Atlas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">🗺️</span>
+      <div><h1>School Atlas</h1><span class="sub">विद्यालय एटलस • Classes 1–5</span></div>
+    </a>
+    <nav class="main-nav">
+      <a href="index.html"        class="nav-link">🏠 Home</a>
+      <a href="world-map.html"    class="nav-link">🌍 World Map</a>
+      <a href="india-map.html"    class="nav-link">🇮🇳 India Map</a>
+      <a href="flags.html"        class="nav-link">🚩 Flags</a>
+      <a href="capitals.html"     class="nav-link active">🏛️ Capitals</a>
+      <a href="rivers.html"       class="nav-link">🌊 Rivers</a>
+      <a href="solar-system.html" class="nav-link">🪐 Solar System</a>
+      <a href="seven-wonders.html" class="nav-link">🗿 7 Wonders</a>
+      <a href="quiz.html"         class="nav-link">🧩 Quiz</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-header">
+  <h2>🏛️ Capitals</h2>
+  <p class="hin">राजधानियाँ</p>
+  <p>India States &amp; World Countries • भारत के राज्य और विश्व के देश</p>
+</div>
+
+<div class="container">
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tbtn active" data-tab="india-tab">🇮🇳 India States &amp; UTs</button>
+    <button class="tbtn" data-tab="world-tab">🌍 World Countries</button>
+  </div>
+
+  <!-- India Tab -->
+  <div id="india-tab" class="tpanel active">
+    <div class="print-note">🖨️ You can print this page for practice! | आप इस पेज को प्रिंट कर सकते हैं!</div>
+    <input type="text" id="india-search" class="search-bar" placeholder="🔍 Search state… राज्य खोजें…">
+    <p style="font-size:.82rem;color:var(--text-light);margin-bottom:12px;">📊 28 States + 8 Union Territories | 28 राज्य + 8 केंद्र शासित प्रदेश</p>
+    <div class="table-wrap">
+      <table id="india-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>State / UT</th>
+            <th>राज्य / केंद्र शासित प्रदेश</th>
+            <th>Capital</th>
+            <th>राजधानी</th>
+            <th>Region</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- States -->
+          <tr><td>1</td><td>Andhra Pradesh</td><td>आंध्र प्रदेश</td><td>Amaravati</td><td>अमरावती</td><td>South</td></tr>
+          <tr><td>2</td><td>Arunachal Pradesh</td><td>अरुणाचल प्रदेश</td><td>Itanagar</td><td>ईटानगर</td><td>Northeast</td></tr>
+          <tr><td>3</td><td>Assam</td><td>असम</td><td>Dispur</td><td>दिसपुर</td><td>Northeast</td></tr>
+          <tr><td>4</td><td>Bihar</td><td>बिहार</td><td>Patna</td><td>पटना</td><td>East</td></tr>
+          <tr><td>5</td><td>Chhattisgarh</td><td>छत्तीसगढ़</td><td>Raipur</td><td>रायपुर</td><td>Central</td></tr>
+          <tr><td>6</td><td>Goa</td><td>गोवा</td><td>Panaji</td><td>पणजी</td><td>West</td></tr>
+          <tr><td>7</td><td>Gujarat</td><td>गुजरात</td><td>Gandhinagar</td><td>गांधीनगर</td><td>West</td></tr>
+          <tr><td>8</td><td>Haryana</td><td>हरियाणा</td><td>Chandigarh</td><td>चंडीगढ़</td><td>North</td></tr>
+          <tr><td>9</td><td>Himachal Pradesh</td><td>हिमाचल प्रदेश</td><td>Shimla</td><td>शिमला</td><td>North</td></tr>
+          <tr><td>10</td><td>Jharkhand</td><td>झारखंड</td><td>Ranchi</td><td>रांची</td><td>East</td></tr>
+          <tr><td>11</td><td>Karnataka</td><td>कर्नाटक</td><td>Bengaluru</td><td>बेंगलुरु</td><td>South</td></tr>
+          <tr><td>12</td><td>Kerala</td><td>केरल</td><td>Thiruvananthapuram</td><td>तिरुवनंतपुरम</td><td>South</td></tr>
+          <tr><td>13</td><td>Madhya Pradesh</td><td>मध्य प्रदेश</td><td>Bhopal</td><td>भोपाल</td><td>Central</td></tr>
+          <tr><td>14</td><td>Maharashtra</td><td>महाराष्ट्र</td><td>Mumbai</td><td>मुंबई</td><td>West</td></tr>
+          <tr><td>15</td><td>Manipur</td><td>मणिपुर</td><td>Imphal</td><td>इम्फाल</td><td>Northeast</td></tr>
+          <tr><td>16</td><td>Meghalaya</td><td>मेघालय</td><td>Shillong</td><td>शिलांग</td><td>Northeast</td></tr>
+          <tr><td>17</td><td>Mizoram</td><td>मिजोरम</td><td>Aizawl</td><td>आइज़ॉल</td><td>Northeast</td></tr>
+          <tr><td>18</td><td>Nagaland</td><td>नागालैंड</td><td>Kohima</td><td>कोहिमा</td><td>Northeast</td></tr>
+          <tr><td>19</td><td>Odisha</td><td>ओडिशा</td><td>Bhubaneswar</td><td>भुवनेश्वर</td><td>East</td></tr>
+          <tr><td>20</td><td>Punjab</td><td>पंजाब</td><td>Chandigarh</td><td>चंडीगढ़</td><td>North</td></tr>
+          <tr><td>21</td><td>Rajasthan</td><td>राजस्थान</td><td>Jaipur</td><td>जयपुर</td><td>North</td></tr>
+          <tr><td>22</td><td>Sikkim</td><td>सिक्किम</td><td>Gangtok</td><td>गंगटोक</td><td>Northeast</td></tr>
+          <tr><td>23</td><td>Tamil Nadu</td><td>तमिलनाडु</td><td>Chennai</td><td>चेन्नई</td><td>South</td></tr>
+          <tr><td>24</td><td>Telangana</td><td>तेलंगाना</td><td>Hyderabad</td><td>हैदराबाद</td><td>South</td></tr>
+          <tr><td>25</td><td>Tripura</td><td>त्रिपुरा</td><td>Agartala</td><td>अगरतला</td><td>Northeast</td></tr>
+          <tr><td>26</td><td>Uttar Pradesh</td><td>उत्तर प्रदेश</td><td>Lucknow</td><td>लखनऊ</td><td>North</td></tr>
+          <tr><td>27</td><td>Uttarakhand</td><td>उत्तराखंड</td><td>Dehradun</td><td>देहरादून</td><td>North</td></tr>
+          <tr><td>28</td><td>West Bengal</td><td>पश्चिम बंगाल</td><td>Kolkata</td><td>कोलकाता</td><td>East</td></tr>
+          <!-- Union Territories -->
+          <tr style="background:#fff8e7 !important"><td>UT1</td><td>Andaman &amp; Nicobar Islands</td><td>अंडमान और निकोबार</td><td>Port Blair</td><td>पोर्ट ब्लेयर</td><td>Island UT</td></tr>
+          <tr style="background:#fff8e7 !important"><td>UT2</td><td>Chandigarh</td><td>चंडीगढ़</td><td>Chandigarh</td><td>चंडीगढ़</td><td>North UT</td></tr>
+          <tr style="background:#fff8e7 !important"><td>UT3</td><td>Dadra &amp; Nagar Haveli, Daman &amp; Diu</td><td>दादरा और नगर हवेली</td><td>Daman</td><td>दमन</td><td>West UT</td></tr>
+          <tr style="background:#fff8e7 !important"><td>UT4</td><td>Delhi (NCT)</td><td>दिल्ली</td><td>New Delhi</td><td>नई दिल्ली</td><td>Capital UT</td></tr>
+          <tr style="background:#fff8e7 !important"><td>UT5</td><td>Jammu &amp; Kashmir</td><td>जम्मू और कश्मीर</td><td>Srinagar (S) / Jammu (W)</td><td>श्रीनगर / जम्मू</td><td>North UT</td></tr>
+          <tr style="background:#fff8e7 !important"><td>UT6</td><td>Ladakh</td><td>लद्दाख</td><td>Leh</td><td>लेह</td><td>North UT</td></tr>
+          <tr style="background:#fff8e7 !important"><td>UT7</td><td>Lakshadweep</td><td>लक्षद्वीप</td><td>Kavaratti</td><td>कवरत्ती</td><td>Island UT</td></tr>
+          <tr style="background:#fff8e7 !important"><td>UT8</td><td>Puducherry</td><td>पुदुचेरी</td><td>Puducherry</td><td>पुदुचेरी</td><td>South UT</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:.78rem;color:var(--text-light);">🟡 Yellow rows = Union Territories (केंद्र शासित प्रदेश)</p>
+  </div>
+
+  <!-- World Tab -->
+  <div id="world-tab" class="tpanel">
+    <div class="print-note">🖨️ You can print this page for practice! | आप इस पेज को प्रिंट कर सकते हैं!</div>
+    <input type="text" id="world-search" class="search-bar" placeholder="🔍 Search country… देश खोजें…">
+    <div class="table-wrap">
+      <table id="world-table">
+        <thead>
+          <tr>
+            <th>Flag</th>
+            <th>Country</th>
+            <th>देश</th>
+            <th>Capital</th>
+            <th>राजधानी</th>
+            <th>Continent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>🇦🇫</td><td>Afghanistan</td><td>अफगानिस्तान</td><td>Kabul</td><td>काबुल</td><td>Asia</td></tr>
+          <tr><td>🇦🇱</td><td>Albania</td><td>अल्बानिया</td><td>Tirana</td><td>तिराना</td><td>Europe</td></tr>
+          <tr><td>🇩🇿</td><td>Algeria</td><td>अल्जीरिया</td><td>Algiers</td><td>अल्जीयर्स</td><td>Africa</td></tr>
+          <tr><td>🇦🇴</td><td>Angola</td><td>अंगोला</td><td>Luanda</td><td>लुआंडा</td><td>Africa</td></tr>
+          <tr><td>🇦🇷</td><td>Argentina</td><td>अर्जेंटीना</td><td>Buenos Aires</td><td>ब्यूनस आयर्स</td><td>S. America</td></tr>
+          <tr><td>🇦🇲</td><td>Armenia</td><td>आर्मेनिया</td><td>Yerevan</td><td>येरेवान</td><td>Asia</td></tr>
+          <tr><td>🇦🇺</td><td>Australia</td><td>ऑस्ट्रेलिया</td><td>Canberra</td><td>कैनबरा</td><td>Oceania</td></tr>
+          <tr><td>🇦🇹</td><td>Austria</td><td>ऑस्ट्रिया</td><td>Vienna</td><td>वियना</td><td>Europe</td></tr>
+          <tr><td>🇦🇿</td><td>Azerbaijan</td><td>अज़रबैजान</td><td>Baku</td><td>बाकू</td><td>Asia</td></tr>
+          <tr><td>🇧🇩</td><td>Bangladesh</td><td>बांग्लादेश</td><td>Dhaka</td><td>ढाका</td><td>Asia</td></tr>
+          <tr><td>🇧🇪</td><td>Belgium</td><td>बेल्जियम</td><td>Brussels</td><td>ब्रुसेल्स</td><td>Europe</td></tr>
+          <tr><td>🇧🇴</td><td>Bolivia</td><td>बोलिविया</td><td>Sucre</td><td>सुक्रे</td><td>S. America</td></tr>
+          <tr><td>🇧🇷</td><td>Brazil</td><td>ब्राजील</td><td>Brasília</td><td>ब्राज़ीलिया</td><td>S. America</td></tr>
+          <tr><td>🇧🇬</td><td>Bulgaria</td><td>बुल्गारिया</td><td>Sofia</td><td>सोफिया</td><td>Europe</td></tr>
+          <tr><td>🇰🇭</td><td>Cambodia</td><td>कंबोडिया</td><td>Phnom Penh</td><td>नोम पेन्ह</td><td>Asia</td></tr>
+          <tr><td>🇨🇲</td><td>Cameroon</td><td>कैमरून</td><td>Yaoundé</td><td>याउंडे</td><td>Africa</td></tr>
+          <tr><td>🇨🇦</td><td>Canada</td><td>कनाडा</td><td>Ottawa</td><td>ओटावा</td><td>N. America</td></tr>
+          <tr><td>🇨🇱</td><td>Chile</td><td>चिली</td><td>Santiago</td><td>सेंटियागो</td><td>S. America</td></tr>
+          <tr><td>🇨🇳</td><td>China</td><td>चीन</td><td>Beijing</td><td>बीजिंग</td><td>Asia</td></tr>
+          <tr><td>🇨🇴</td><td>Colombia</td><td>कोलम्बिया</td><td>Bogotá</td><td>बोगोटा</td><td>S. America</td></tr>
+          <tr><td>🇨🇩</td><td>Congo (DRC)</td><td>कांगो</td><td>Kinshasa</td><td>किंशासा</td><td>Africa</td></tr>
+          <tr><td>🇨🇿</td><td>Czech Republic</td><td>चेक गणराज्य</td><td>Prague</td><td>प्राग</td><td>Europe</td></tr>
+          <tr><td>🇩🇰</td><td>Denmark</td><td>डेनमार्क</td><td>Copenhagen</td><td>कोपेनहेगन</td><td>Europe</td></tr>
+          <tr><td>🇪🇬</td><td>Egypt</td><td>मिस्र</td><td>Cairo</td><td>काहिरा</td><td>Africa</td></tr>
+          <tr><td>🇪🇹</td><td>Ethiopia</td><td>इथियोपिया</td><td>Addis Ababa</td><td>अदीस अबाबा</td><td>Africa</td></tr>
+          <tr><td>🇫🇮</td><td>Finland</td><td>फिनलैंड</td><td>Helsinki</td><td>हेलसिंकी</td><td>Europe</td></tr>
+          <tr><td>🇫🇷</td><td>France</td><td>फ्रांस</td><td>Paris</td><td>पेरिस</td><td>Europe</td></tr>
+          <tr><td>🇩🇪</td><td>Germany</td><td>जर्मनी</td><td>Berlin</td><td>बर्लिन</td><td>Europe</td></tr>
+          <tr><td>🇬🇭</td><td>Ghana</td><td>घाना</td><td>Accra</td><td>अक्रा</td><td>Africa</td></tr>
+          <tr><td>🇬🇷</td><td>Greece</td><td>ग्रीस</td><td>Athens</td><td>एथेंस</td><td>Europe</td></tr>
+          <tr><td>🇭🇺</td><td>Hungary</td><td>हंगरी</td><td>Budapest</td><td>बुडापेस्ट</td><td>Europe</td></tr>
+          <tr><td>🇮🇳</td><td>India</td><td>भारत</td><td>New Delhi</td><td>नई दिल्ली</td><td>Asia</td></tr>
+          <tr><td>🇮🇩</td><td>Indonesia</td><td>इंडोनेशिया</td><td>Jakarta</td><td>जकार्ता</td><td>Asia</td></tr>
+          <tr><td>🇮🇷</td><td>Iran</td><td>ईरान</td><td>Tehran</td><td>तेहरान</td><td>Asia</td></tr>
+          <tr><td>🇮🇶</td><td>Iraq</td><td>इराक</td><td>Baghdad</td><td>बगदाद</td><td>Asia</td></tr>
+          <tr><td>🇮🇱</td><td>Israel</td><td>इज़राइल</td><td>Jerusalem</td><td>यरुशलम</td><td>Asia</td></tr>
+          <tr><td>🇮🇹</td><td>Italy</td><td>इटली</td><td>Rome</td><td>रोम</td><td>Europe</td></tr>
+          <tr><td>🇯🇵</td><td>Japan</td><td>जापान</td><td>Tokyo</td><td>टोक्यो</td><td>Asia</td></tr>
+          <tr><td>🇯🇴</td><td>Jordan</td><td>जॉर्डन</td><td>Amman</td><td>अम्मान</td><td>Asia</td></tr>
+          <tr><td>🇰🇿</td><td>Kazakhstan</td><td>कजाखस्तान</td><td>Astana</td><td>अस्ताना</td><td>Asia</td></tr>
+          <tr><td>🇰🇪</td><td>Kenya</td><td>केन्या</td><td>Nairobi</td><td>नैरोबी</td><td>Africa</td></tr>
+          <tr><td>🇰🇷</td><td>South Korea</td><td>दक्षिण कोरिया</td><td>Seoul</td><td>सियोल</td><td>Asia</td></tr>
+          <tr><td>🇲🇾</td><td>Malaysia</td><td>मलेशिया</td><td>Kuala Lumpur</td><td>क्वालालंपुर</td><td>Asia</td></tr>
+          <tr><td>🇲🇽</td><td>Mexico</td><td>मेक्सिको</td><td>Mexico City</td><td>मेक्सिको सिटी</td><td>N. America</td></tr>
+          <tr><td>🇲🇦</td><td>Morocco</td><td>मोरक्को</td><td>Rabat</td><td>रबात</td><td>Africa</td></tr>
+          <tr><td>🇲🇲</td><td>Myanmar</td><td>म्यांमार</td><td>Naypyidaw</td><td>नाएप्यीडॉ</td><td>Asia</td></tr>
+          <tr><td>🇳🇵</td><td>Nepal</td><td>नेपाल</td><td>Kathmandu</td><td>काठमांडू</td><td>Asia</td></tr>
+          <tr><td>🇳🇱</td><td>Netherlands</td><td>नीदरलैंड</td><td>Amsterdam</td><td>एम्स्टर्डम</td><td>Europe</td></tr>
+          <tr><td>🇳🇿</td><td>New Zealand</td><td>न्यूजीलैंड</td><td>Wellington</td><td>वेलिंगटन</td><td>Oceania</td></tr>
+          <tr><td>🇳🇬</td><td>Nigeria</td><td>नाइजीरिया</td><td>Abuja</td><td>अबुजा</td><td>Africa</td></tr>
+          <tr><td>🇳🇴</td><td>Norway</td><td>नॉर्वे</td><td>Oslo</td><td>ओस्लो</td><td>Europe</td></tr>
+          <tr><td>🇵🇰</td><td>Pakistan</td><td>पाकिस्तान</td><td>Islamabad</td><td>इस्लामाबाद</td><td>Asia</td></tr>
+          <tr><td>🇵🇪</td><td>Peru</td><td>पेरू</td><td>Lima</td><td>लीमा</td><td>S. America</td></tr>
+          <tr><td>🇵🇭</td><td>Philippines</td><td>फिलीपींस</td><td>Manila</td><td>मनीला</td><td>Asia</td></tr>
+          <tr><td>🇵🇱</td><td>Poland</td><td>पोलैंड</td><td>Warsaw</td><td>वारसॉ</td><td>Europe</td></tr>
+          <tr><td>🇵🇹</td><td>Portugal</td><td>पुर्तगाल</td><td>Lisbon</td><td>लिस्बन</td><td>Europe</td></tr>
+          <tr><td>🇷🇴</td><td>Romania</td><td>रोमानिया</td><td>Bucharest</td><td>बुखारेस्ट</td><td>Europe</td></tr>
+          <tr><td>🇷🇺</td><td>Russia</td><td>रूस</td><td>Moscow</td><td>मास्को</td><td>Europe</td></tr>
+          <tr><td>🇸🇦</td><td>Saudi Arabia</td><td>सऊदी अरब</td><td>Riyadh</td><td>रियाध</td><td>Asia</td></tr>
+          <tr><td>🇿🇦</td><td>South Africa</td><td>दक्षिण अफ्रीका</td><td>Pretoria</td><td>प्रिटोरिया</td><td>Africa</td></tr>
+          <tr><td>🇪🇸</td><td>Spain</td><td>स्पेन</td><td>Madrid</td><td>मैड्रिड</td><td>Europe</td></tr>
+          <tr><td>🇱🇰</td><td>Sri Lanka</td><td>श्रीलंका</td><td>Sri Jayawardenepura Kotte</td><td>श्री जयवर्धनेपुरा</td><td>Asia</td></tr>
+          <tr><td>🇸🇪</td><td>Sweden</td><td>स्वीडन</td><td>Stockholm</td><td>स्टॉकहोम</td><td>Europe</td></tr>
+          <tr><td>🇨🇭</td><td>Switzerland</td><td>स्विट्ज़रलैंड</td><td>Bern</td><td>बर्न</td><td>Europe</td></tr>
+          <tr><td>🇸🇾</td><td>Syria</td><td>सीरिया</td><td>Damascus</td><td>दमिश्क</td><td>Asia</td></tr>
+          <tr><td>🇹🇿</td><td>Tanzania</td><td>तंजानिया</td><td>Dodoma</td><td>डोडोमा</td><td>Africa</td></tr>
+          <tr><td>🇹🇭</td><td>Thailand</td><td>थाईलैंड</td><td>Bangkok</td><td>बैंकॉक</td><td>Asia</td></tr>
+          <tr><td>🇹🇷</td><td>Turkey</td><td>तुर्किया</td><td>Ankara</td><td>अंकारा</td><td>Asia</td></tr>
+          <tr><td>🇺🇦</td><td>Ukraine</td><td>यूक्रेन</td><td>Kyiv</td><td>कीव</td><td>Europe</td></tr>
+          <tr><td>🇦🇪</td><td>United Arab Emirates</td><td>यूएई</td><td>Abu Dhabi</td><td>अबू धाबी</td><td>Asia</td></tr>
+          <tr><td>🇬🇧</td><td>United Kingdom</td><td>यूनाइटेड किंगडम</td><td>London</td><td>लंदन</td><td>Europe</td></tr>
+          <tr><td>🇺🇸</td><td>United States</td><td>संयुक्त राज्य अमेरिका</td><td>Washington D.C.</td><td>वाशिंगटन डी.सी.</td><td>N. America</td></tr>
+          <tr><td>🇺🇿</td><td>Uzbekistan</td><td>उज़्बेकिस्तान</td><td>Tashkent</td><td>ताशकंद</td><td>Asia</td></tr>
+          <tr><td>🇻🇪</td><td>Venezuela</td><td>वेनेजुएला</td><td>Caracas</td><td>काराकस</td><td>S. America</td></tr>
+          <tr><td>🇻🇳</td><td>Vietnam</td><td>वियतनाम</td><td>Hanoi</td><td>हनोई</td><td>Asia</td></tr>
+          <tr><td>🇾🇪</td><td>Yemen</td><td>यमन</td><td>Sana'a</td><td>सना</td><td>Asia</td></tr>
+          <tr><td>🇿🇲</td><td>Zambia</td><td>जाम्बिया</td><td>Lusaka</td><td>लुसाका</td><td>Africa</td></tr>
+          <tr><td>🇿🇼</td><td>Zimbabwe</td><td>ज़िम्बाब्वे</td><td>Harare</td><td>हरारे</td><td>Africa</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>🎓 Free Educational Atlas for Primary School Students | Classes 1–5</p>
+  <p>निःशुल्क शैक्षिक एटलस | कक्षा 1–5</p>
+</footer>
+
+<script src="main.js"></script>
+<script>
+  initSearch('india-search', 'india-table');
+  initSearch('world-search', 'world-table');
+</script>
+</body>
+</html>

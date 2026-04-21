@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World Map | School Atlas</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    #wmap { height: 540px; }
+    .leaflet-popup-content b { color: #0B6E4F; font-size: 1rem; }
+    .leaflet-popup-content .hin { color: #FF6B35; font-size: 0.85rem; }
+    .leaflet-popup-content .pop-row { font-size: 0.82rem; margin-top: 4px; }
+    .leaflet-popup-content .fun { font-style: italic; font-size: 0.78rem; color: #555; margin-top:6px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">🗺️</span>
+      <div><h1>School Atlas</h1><span class="sub">विद्यालय एटलस • Classes 1–5</span></div>
+    </a>
+    <nav class="main-nav">
+      <a href="index.html"        class="nav-link">🏠 Home</a>
+      <a href="world-map.html"    class="nav-link active">🌍 World Map</a>
+      <a href="india-map.html"    class="nav-link">🇮🇳 India Map</a>
+      <a href="flags.html"        class="nav-link">🚩 Flags</a>
+      <a href="capitals.html"     class="nav-link">🏛️ Capitals</a>
+      <a href="rivers.html"       class="nav-link">🌊 Rivers</a>
+      <a href="solar-system.html" class="nav-link">🪐 Solar System</a>
+      <a href="seven-wonders.html" class="nav-link">🗿 7 Wonders</a>
+      <a href="quiz.html"         class="nav-link">🧩 Quiz</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-header">
+  <h2>🌍 World Map</h2>
+  <p class="hin">विश्व मानचित्र</p>
+  <p>Click on any country marker to learn more! • किसी भी देश पर क्लिक करें!</p>
+</div>
+
+<div class="map-wrap">
+  <div class="map-btns">
+    <button class="mbtn active" onclick="flyTo(20,0,2,'All')">🌐 All</button>
+    <button class="mbtn" onclick="flyTo(30,80,3,'Asia')">🌏 Asia</button>
+    <button class="mbtn" onclick="flyTo(55,15,3,'Europe')">🌍 Europe</button>
+    <button class="mbtn" onclick="flyTo(5,20,3,'Africa')">🌍 Africa</button>
+    <button class="mbtn" onclick="flyTo(45,-100,3,'N. America')">🌎 N. America</button>
+    <button class="mbtn" onclick="flyTo(-20,-60,3,'S. America')">🌎 S. America</button>
+    <button class="mbtn" onclick="flyTo(-25,135,4,'Australia')">🌏 Australia</button>
+  </div>
+  <div id="wmap"></div>
+  <div class="map-tip">💡 <strong>Tip:</strong> Click on a 📍 marker to see country name, capital, flag and a fun fact! | किसी मार्कर पर क्लिक करें।</div>
+
+  <!-- Oceans Reference -->
+  <div style="margin-top:20px;">
+    <p class="sec-title" style="margin-top:0">🌊 Five Oceans • पाँच महासागर</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:12px;">
+      <div style="background:white;border-radius:10px;padding:14px;box-shadow:var(--shadow);border-left:4px solid #3498db;">
+        <strong>Pacific Ocean</strong><br><span style="color:var(--orange);font-size:.85rem;">प्रशांत महासागर</span><br>
+        <span style="font-size:.8rem;color:var(--text-light);">Largest ocean • 30% of Earth</span>
+      </div>
+      <div style="background:white;border-radius:10px;padding:14px;box-shadow:var(--shadow);border-left:4px solid #2980b9;">
+        <strong>Atlantic Ocean</strong><br><span style="color:var(--orange);font-size:.85rem;">अटलांटिक महासागर</span><br>
+        <span style="font-size:.8rem;color:var(--text-light);">2nd largest • Between Americas &amp; Europe</span>
+      </div>
+      <div style="background:white;border-radius:10px;padding:14px;box-shadow:var(--shadow);border-left:4px solid #1a5276;">
+        <strong>Indian Ocean</strong><br><span style="color:var(--orange);font-size:.85rem;">हिंद महासागर</span><br>
+        <span style="font-size:.8rem;color:var(--text-light);">Named after India • Surrounds India</span>
+      </div>
+      <div style="background:white;border-radius:10px;padding:14px;box-shadow:var(--shadow);border-left:4px solid #85c1e9;">
+        <strong>Arctic Ocean</strong><br><span style="color:var(--orange);font-size:.85rem;">आर्कटिक महासागर</span><br>
+        <span style="font-size:.8rem;color:var(--text-light);">Smallest &amp; coldest ocean</span>
+      </div>
+      <div style="background:white;border-radius:10px;padding:14px;box-shadow:var(--shadow);border-left:4px solid #aed6f1;">
+        <strong>Southern Ocean</strong><br><span style="color:var(--orange);font-size:.85rem;">दक्षिणी महासागर</span><br>
+        <span style="font-size:.8rem;color:var(--text-light);">Around Antarctica</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>🎓 Free Educational Atlas for Primary School Students | Classes 1–5</p>
+  <p>निःशुल्क शैक्षिक एटलस | कक्षा 1–5</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="main.js"></script>
+<script>
+// Country data: [name, hindi, capital, flag, continent, fun fact, lat, lng]
+const COUNTRIES = [
+  // Asia
+  ["India","भारत","New Delhi","🇮🇳","Asia","India has the most post offices in the world!",20.5937,78.9629],
+  ["China","चीन","Beijing","🇨🇳","Asia","China has the longest wall in the world — the Great Wall!",35.8617,104.1954],
+  ["Japan","जापान","Tokyo","🇯🇵","Asia","Japan has over 6,800 islands!",36.2048,138.2529],
+  ["Russia","रूस","Moscow","🇷🇺","Europe/Asia","Russia is the largest country in the world!",61.5240,105.3188],
+  ["Saudi Arabia","सऊदी अरब","Riyadh","🇸🇦","Asia","Saudi Arabia has the world's largest oil reserves.",23.8859,45.0792],
+  ["Pakistan","पाकिस्तान","Islamabad","🇵🇰","Asia","Pakistan has the world's second largest salt mine.",30.3753,69.3451],
+  ["Bangladesh","बांग्लादेश","Dhaka","🇧🇩","Asia","Bangladesh means 'Land of the Bengali People'.",23.6850,90.3563],
+  ["Sri Lanka","श्रीलंका","Sri Jayawardenepura Kotte","🇱🇰","Asia","Sri Lanka is called the Pearl of the Indian Ocean.",7.8731,80.7718],
+  ["Nepal","नेपाल","Kathmandu","🇳🇵","Asia","Mount Everest, the world's highest peak, is in Nepal!",28.3949,84.1240],
+  ["Afghanistan","अफ़गानिस्तान","Kabul","🇦🇫","Asia","Afghanistan is a landlocked country in Central Asia.",33.9391,67.7100],
+  ["Iran","ईरान","Tehran","🇮🇷","Asia","Iran was once known as Persia.",32.4279,53.6880],
+  ["Iraq","इराक","Baghdad","🇮🇶","Asia","The world's first writing was invented in ancient Iraq (Mesopotamia).",33.2232,43.6793],
+  ["Israel","इज़राइल","Jerusalem","🇮🇱","Asia","The Dead Sea in Israel is the lowest point on Earth.",31.0461,34.8516],
+  ["Turkey","तुर्किया","Ankara","🇹🇷","Asia","Istanbul in Turkey is the only city on two continents!",38.9637,35.2433],
+  ["Thailand","थाईलैंड","Bangkok","🇹🇭","Asia","Thailand means 'Land of the Free'.",15.8700,100.9925],
+  ["Vietnam","वियतनाम","Hanoi","🇻🇳","Asia","Vietnam is shaped like the letter 'S'!",14.0583,108.2772],
+  ["South Korea","दक्षिण कोरिया","Seoul","🇰🇷","Asia","South Korea has the fastest internet in the world!",35.9078,127.7669],
+  ["Indonesia","इंडोनेशिया","Jakarta","🇮🇩","Asia","Indonesia is the world's largest archipelago — 17,000 islands!",0.7893,113.9213],
+  ["Malaysia","मलेशिया","Kuala Lumpur","🇲🇾","Asia","Malaysia is home to some of the world's oldest rainforests.",4.2105,101.9758],
+  ["Philippines","फिलीपींस","Manila","🇵🇭","Asia","The Philippines has over 7,000 islands!",12.8797,121.7740],
+  ["UAE","यूएई","Abu Dhabi","🇦🇪","Asia","The UAE has the world's tallest building — Burj Khalifa!",23.4241,53.8478],
+  // Europe
+  ["United Kingdom","यूनाइटेड किंगडम","London","🇬🇧","Europe","The UK invented the sport of football (soccer)!",55.3781,-3.4360],
+  ["France","फ्रांस","Paris","🇫🇷","Europe","France is the most visited country in the world!",46.2276,2.2137],
+  ["Germany","जर्मनी","Berlin","🇩🇪","Europe","Germany is famous for the Christmas market tradition.",51.1657,10.4515],
+  ["Italy","इटली","Rome","🇮🇹","Europe","Italy is shaped like a boot!",41.8719,12.5674],
+  ["Spain","स्पेन","Madrid","🇪🇸","Europe","Spain has the world's oldest restaurant — El Sobrino de Botín.",40.4637,-3.7492],
+  ["Greece","ग्रीस","Athens","🇬🇷","Europe","The Olympic Games started in ancient Greece!",39.0742,21.8243],
+  ["Netherlands","नीदरलैंड","Amsterdam","🇳🇱","Europe","The Netherlands is below sea level in many places!",52.1326,5.2913],
+  ["Sweden","स्वीडन","Stockholm","🇸🇪","Europe","Sweden invented the zipper and the safety match!",60.1282,18.6435],
+  ["Norway","नॉर्वे","Oslo","🇳🇴","Europe","Norway has the Northern Lights — Aurora Borealis!",60.4720,8.4689],
+  ["Switzerland","स्विट्ज़रलैंड","Bern","🇨🇭","Europe","Switzerland has 4 official languages!",46.8182,8.2275],
+  // Africa
+  ["Egypt","मिस्र","Cairo","🇪🇬","Africa","Egypt is home to the ancient Pyramids and the Sphinx!",26.8206,30.8025],
+  ["Nigeria","नाइजीरिया","Abuja","🇳🇬","Africa","Nigeria is the most populous country in Africa.",9.0820,8.6753],
+  ["South Africa","दक्षिण अफ्रीका","Pretoria","🇿🇦","Africa","South Africa has 11 official languages!",30.5595,22.9375],
+  ["Kenya","केन्या","Nairobi","🇰🇪","Africa","Kenya is home to the great Maasai Mara wildlife reserve.",0.0236,37.9062],
+  ["Ethiopia","इथियोपिया","Addis Ababa","🇪🇹","Africa","Ethiopia is the only African country never colonised.",9.1450,40.4897],
+  ["Morocco","मोरक्को","Rabat","🇲🇦","Africa","Morocco is the closest African country to Europe.",31.7917,-7.0926],
+  ["Ghana","घाना","Accra","🇬🇭","Africa","Ghana was the first sub-Saharan African country to gain independence.",7.9465,-1.0232],
+  ["Tanzania","तंजानिया","Dodoma","🇹🇿","Africa","Mount Kilimanjaro, Africa's highest peak, is in Tanzania.",6.3690,34.8888],
+  // Americas
+  ["United States","संयुक्त राज्य अमेरिका","Washington D.C.","🇺🇸","N. America","The USA has 50 states!",37.0902,-95.7129],
+  ["Canada","कनाडा","Ottawa","🇨🇦","N. America","Canada has the most lakes in the world!",56.1304,-106.3468],
+  ["Mexico","मेक्सिको","Mexico City","🇲🇽","N. America","Mexico City is built on an ancient Aztec lake!",23.6345,-102.5528],
+  ["Brazil","ब्राजील","Brasília","🇧🇷","S. America","Brazil has the Amazon Rainforest — the world's largest rainforest!",14.2350,-51.9253],
+  ["Argentina","अर्जेंटीना","Buenos Aires","🇦🇷","S. America","Argentina is the 8th largest country in the world.",38.4161,-63.6167],
+  ["Peru","पेरू","Lima","🇵🇪","S. America","The ancient Inca civilisation was in Peru — Machu Picchu is here!",9.1900,-75.0152],
+  ["Colombia","कोलम्बिया","Bogotá","🇨🇴","S. America","Colombia is named after Christopher Columbus.",4.5709,-74.2973],
+  ["Chile","चिली","Santiago","🇨🇱","S. America","Chile is the world's longest country — 4,300 km long!",35.6751,-71.5430],
+  // Oceania & others
+  ["Australia","ऑस्ट्रेलिया","Canberra","🇦🇺","Australia","Australia is the world's smallest continent and largest island!",25.2744,133.7751],
+  ["New Zealand","न्यूजीलैंड","Wellington","🇳🇿","Australia","New Zealand was the first country to give women the right to vote!",40.9006,174.8860],
+];
+
+// Initialize map
+const map = L.map('wmap').setView([20, 0], 2);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors',
+  maxZoom: 10
+}).addTo(map);
+
+// Custom marker icon
+function makeIcon(flag) {
+  return L.divIcon({
+    html: `<div style="font-size:1.4rem;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4));">${flag}</div>`,
+    className: '', iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -14]
+  });
+}
+
+// Add markers
+COUNTRIES.forEach(([name, hindi, capital, flag, cont, fact, lat, lng]) => {
+  L.marker([lat, lng], { icon: makeIcon(flag) })
+   .addTo(map)
+   .bindPopup(`
+     <b>${flag} ${name}</b><br>
+     <span class="hin">${hindi}</span><br>
+     <span class="pop-row">🏛️ Capital: <strong>${capital}</strong></span><br>
+     <span class="pop-row">🌍 Continent: ${cont}</span><br>
+     <span class="fun">⭐ ${fact}</span>
+   `, { maxWidth: 220 });
+});
+
+// Fly-to function
+function flyTo(lat, lng, zoom, name) {
+  map.flyTo([lat, lng], zoom, { duration: 1.5 });
+  document.querySelectorAll('.mbtn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

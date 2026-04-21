@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solar System | School Atlas</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .solar-visual {
+      background: radial-gradient(ellipse at center, #1a1a3e 0%, #0a0a1a 70%);
+      border-radius: var(--radius); padding: 28px 20px; margin-bottom: 28px;
+      overflow-x: auto; text-align: center;
+    }
+    .orbit-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; flex-wrap: nowrap; min-width: 700px;
+    }
+    .orbit-item { text-align: center; flex-shrink: 0; cursor: pointer; }
+    .orbit-item:hover .orb { transform: scale(1.2); filter: brightness(1.3); }
+    .orb { border-radius: 50%; margin: 0 auto 4px; transition: all 0.25s; display: flex; align-items: center; justify-content: center; }
+    .orbit-label { color: rgba(255,255,255,.8); font-size: .65rem; font-weight: 700; }
+    .orbit-label-hi { color: rgba(255,255,255,.5); font-size: .58rem; }
+    .orbit-line { height: 2px; background: rgba(255,255,255,.1); flex: 1; min-width: 4px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">🗺️</span>
+      <div><h1>School Atlas</h1><span class="sub">विद्यालय एटलस • Classes 1–5</span></div>
+    </a>
+    <nav class="main-nav">
+      <a href="index.html"        class="nav-link">🏠 Home</a>
+      <a href="world-map.html"    class="nav-link">🌍 World Map</a>
+      <a href="india-map.html"    class="nav-link">🇮🇳 India Map</a>
+      <a href="flags.html"        class="nav-link">🚩 Flags</a>
+      <a href="capitals.html"     class="nav-link">🏛️ Capitals</a>
+      <a href="rivers.html"       class="nav-link">🌊 Rivers</a>
+      <a href="solar-system.html" class="nav-link active">🪐 Solar System</a>
+      <a href="seven-wonders.html" class="nav-link">🗿 7 Wonders</a>
+      <a href="quiz.html"         class="nav-link">🧩 Quiz</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-header">
+  <h2>🪐 Solar System</h2>
+  <p class="hin">सौर मंडल</p>
+  <p>Our Sun and 8 Planets • हमारा सूर्य और 8 ग्रह</p>
+</div>
+
+<div class="container">
+
+  <!-- Visual Solar System -->
+  <div class="solar-visual">
+    <p style="color:rgba(255,255,255,.6);font-size:.8rem;margin-bottom:16px;">☀️ Click on a planet below to learn more! • किसी ग्रह पर क्लिक करें!</p>
+    <div class="orbit-row">
+      <!-- Sun -->
+      <div class="orbit-item" onclick="scrollToPlanet('sun')">
+        <div class="orb" style="width:60px;height:60px;background:radial-gradient(circle,#fff7e0,#ffd000,#ff8c00);box-shadow:0 0 30px #ff8c00,0 0 60px #ff6000;"></div>
+        <div class="orbit-label">Sun</div>
+        <div class="orbit-label-hi">सूर्य</div>
+      </div>
+      <div class="orbit-line"></div>
+      <!-- Mercury -->
+      <div class="orbit-item" onclick="scrollToPlanet('mercury')">
+        <div class="orb" style="width:18px;height:18px;background:radial-gradient(circle,#d4c5b0,#a09080);"></div>
+        <div class="orbit-label">Mercury</div><div class="orbit-label-hi">बुध</div>
+      </div>
+      <div class="orbit-line"></div>
+      <!-- Venus -->
+      <div class="orbit-item" onclick="scrollToPlanet('venus')">
+        <div class="orb" style="width:24px;height:24px;background:radial-gradient(circle,#fff0c0,#e8c060,#c08020);"></div>
+        <div class="orbit-label">Venus</div><div class="orbit-label-hi">शुक्र</div>
+      </div>
+      <div class="orbit-line"></div>
+      <!-- Earth -->
+      <div class="orbit-item" onclick="scrollToPlanet('earth')">
+        <div class="orb" style="width:26px;height:26px;background:radial-gradient(circle,#a8e0f8,#3498db,#27ae60);"></div>
+        <div class="orbit-label">Earth</div><div class="orbit-label-hi">पृथ्वी</div>
+      </div>
+      <div class="orbit-line"></div>
+      <!-- Mars -->
+      <div class="orbit-item" onclick="scrollToPlanet('mars')">
+        <div class="orb" style="width:22px;height:22px;background:radial-gradient(circle,#e88060,#c04020);"></div>
+        <div class="orbit-label">Mars</div><div class="orbit-label-hi">मंगल</div>
+      </div>
+      <div class="orbit-line"></div>
+      <!-- Jupiter -->
+      <div class="orbit-item" onclick="scrollToPlanet('jupiter')">
+        <div class="orb" style="width:50px;height:50px;background:radial-gradient(circle,#f0d090,#c8a060,#a08040);"></div>
+        <div class="orbit-label">Jupiter</div><div class="orbit-label-hi">बृहस्पति</div>
+      </div>
+      <div class="orbit-line"></div>
+      <!-- Saturn -->
+      <div class="orbit-item" onclick="scrollToPlanet('saturn')">
+        <div class="orb" style="width:44px;height:44px;background:radial-gradient(circle,#f0e0b0,#d0b060);box-shadow:0 0 0 8px rgba(200,170,80,.25),0 0 0 16px rgba(200,170,80,.1);"></div>
+        <div class="orbit-label">Saturn</div><div class="orbit-label-hi">शनि</div>
+      </div>
+      <div class="orbit-line"></div>
+      <!-- Uranus -->
+      <div class="orbit-item" onclick="scrollToPlanet('uranus')">
+        <div class="orb" style="width:36px;height:36px;background:radial-gradient(circle,#b0f0e8,#60c8c0);"></div>
+        <div class="orbit-label">Uranus</div><div class="orbit-label-hi">अरुण</div>
+      </div>
+      <div class="orbit-line"></div>
+      <!-- Neptune -->
+      <div class="orbit-item" onclick="scrollToPlanet('neptune')">
+        <div class="orb" style="width:34px;height:34px;background:radial-gradient(circle,#8090f8,#2040c8);"></div>
+        <div class="orbit-label">Neptune</div><div class="orbit-label-hi">वरुण</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sun Card -->
+  <div id="sun" style="scroll-margin-top:70px;">
+    <div class="sun-banner">
+      <span class="si">☀️</span>
+      <h3>The Sun • सूर्य</h3>
+      <p style="opacity:.9;font-size:.9rem;">The star at the centre of our Solar System | हमारे सौर मंडल के केंद्र में स्थित तारा</p>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:14px;font-size:.85rem;">
+        <span>⭐ It is a STAR, not a planet</span>
+        <span>📏 1.39 million km wide</span>
+        <span>🌡️ Surface: ~5,500°C</span>
+        <span>🌍 Distance from Earth: ~150 million km</span>
+        <span>💡 All energy on Earth comes from the Sun!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Planet Cards -->
+  <p class="sec-title">The 8 Planets • 8 ग्रह</p>
+  <p class="sec-hindi">सूर्य से दूरी के क्रम में (nearest to farthest from the Sun)</p>
+  <div class="planets-grid">
+
+    <div class="planet-card" id="mercury" style="scroll-margin-top:70px;">
+      <div class="pc-head">
+        <span class="pe">☿</span>
+        <div><div class="pname">1. Mercury</div><div class="phin">बुध</div></div>
+      </div>
+      <p class="pfact">Mercury is the smallest planet and closest to the Sun. It has no atmosphere, so temperatures go from very hot (+430°C) to very cold (-180°C)!</p>
+      <div class="pstat">📏 Size: 4,880 km diameter | ☀️ Distance from Sun: 57.9 million km</div>
+      <div class="pstat">🌙 Moons: 0 | 🔄 One year = 88 Earth days</div>
+    </div>
+
+    <div class="planet-card" id="venus" style="scroll-margin-top:70px;">
+      <div class="pc-head">
+        <span class="pe">♀️</span>
+        <div><div class="pname">2. Venus</div><div class="phin">शुक्र</div></div>
+      </div>
+      <p class="pfact">Venus is the hottest planet (not Mercury!) because of its thick atmosphere. It is also the brightest object in the night sky after the Moon. It spins in the opposite direction!</p>
+      <div class="pstat">📏 Size: 12,104 km | ☀️ 108 million km from Sun</div>
+      <div class="pstat">🌙 Moons: 0 | 🔄 One year = 225 Earth days</div>
+    </div>
+
+    <div class="planet-card" id="earth" style="scroll-margin-top:70px;border:2px solid #27ae60;">
+      <div class="pc-head">
+        <span class="pe">🌍</span>
+        <div><div class="pname">3. Earth</div><div class="phin">पृथ्वी</div></div>
+      </div>
+      <p class="pfact">Our home! Earth is the only known planet with life. It has liquid water, a protective atmosphere and one Moon. 71% of Earth is covered by water!</p>
+      <div class="pstat">📏 Size: 12,742 km | ☀️ 150 million km from Sun</div>
+      <div class="pstat">🌙 Moons: 1 | 🔄 One year = 365.25 days</div>
+    </div>
+
+    <div class="planet-card" id="mars" style="scroll-margin-top:70px;">
+      <div class="pc-head">
+        <span class="pe">🔴</span>
+        <div><div class="pname">4. Mars</div><div class="phin">मंगल</div></div>
+      </div>
+      <p class="pfact">Mars is called the "Red Planet" because of its reddish iron oxide surface. It has the tallest volcano in the Solar System — Olympus Mons (27 km high!). Scientists are trying to send humans to Mars!</p>
+      <div class="pstat">📏 Size: 6,779 km | ☀️ 228 million km from Sun</div>
+      <div class="pstat">🌙 Moons: 2 (Phobos &amp; Deimos) | 🔄 One year = 687 Earth days</div>
+    </div>
+
+    <div class="planet-card" id="jupiter" style="scroll-margin-top:70px;">
+      <div class="pc-head">
+        <span class="pe">🪐</span>
+        <div><div class="pname">5. Jupiter</div><div class="phin">बृहस्पति</div></div>
+      </div>
+      <p class="pfact">Jupiter is the LARGEST planet — 1,300 Earths could fit inside it! It has a giant storm called the "Great Red Spot" that has been raging for over 400 years. It is a gas giant — no solid surface!</p>
+      <div class="pstat">📏 Size: 139,820 km | ☀️ 779 million km from Sun</div>
+      <div class="pstat">🌙 Moons: 95 | 🔄 One year = 12 Earth years</div>
+    </div>
+
+    <div class="planet-card" id="saturn" style="scroll-margin-top:70px;">
+      <div class="pc-head">
+        <span class="pe">🪐</span>
+        <div><div class="pname">6. Saturn</div><div class="phin">शनि</div></div>
+      </div>
+      <p class="pfact">Saturn is famous for its beautiful RINGS made of ice and rock! It is the least dense planet — it could float in water! It has 146 known moons, including Titan which has its own atmosphere.</p>
+      <div class="pstat">📏 Size: 116,460 km | ☀️ 1.43 billion km from Sun</div>
+      <div class="pstat">🌙 Moons: 146 | 🔄 One year = 29 Earth years</div>
+    </div>
+
+    <div class="planet-card" id="uranus" style="scroll-margin-top:70px;">
+      <div class="pc-head">
+        <span class="pe">🔵</span>
+        <div><div class="pname">7. Uranus</div><div class="phin">अरुण</div></div>
+      </div>
+      <p class="pfact">Uranus is an ice giant with a blue-green colour. It is unique because it rotates on its SIDE — tilted at 98°! It is the coldest planet in the Solar System (-224°C).</p>
+      <div class="pstat">📏 Size: 50,724 km | ☀️ 2.87 billion km from Sun</div>
+      <div class="pstat">🌙 Moons: 28 | 🔄 One year = 84 Earth years</div>
+    </div>
+
+    <div class="planet-card" id="neptune" style="scroll-margin-top:70px;">
+      <div class="pc-head">
+        <span class="pe">🌀</span>
+        <div><div class="pname">8. Neptune</div><div class="phin">वरुण</div></div>
+      </div>
+      <p class="pfact">Neptune is the farthest planet from the Sun. It has the strongest winds in the Solar System — up to 2,100 km/h! It takes 165 Earth years to orbit the Sun once. It was discovered in 1846.</p>
+      <div class="pstat">📏 Size: 49,244 km | ☀️ 4.5 billion km from Sun</div>
+      <div class="pstat">🌙 Moons: 16 | 🔄 One year = 165 Earth years</div>
+    </div>
+
+  </div>
+
+  <!-- Order Tip -->
+  <div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-radius:14px;padding:20px;margin-top:28px;">
+    <strong>💡 How to Remember Planet Order! • ग्रहों का क्रम याद रखें!</strong>
+    <p style="margin-top:8px;font-size:.9rem;"><strong>"My Very Energetic Mother Just Served Us Noodles"</strong></p>
+    <p style="font-size:.83rem;color:var(--text-light);">Mercury • Venus • Earth • Mars • Jupiter • Saturn • Uranus • Neptune</p>
+    <p style="margin-top:8px;font-size:.88rem;color:var(--orange);"><strong>"मेरी बहुत ऊर्जावान माँ ने हमें नूडल्स परोसे"</strong></p>
+  </div>
+
+</div>
+
+<footer>
+  <p>🎓 Free Educational Atlas for Primary School Students | Classes 1–5</p>
+  <p>निःशुल्क शैक्षिक एटलस | कक्षा 1–5</p>
+</footer>
+
+<script src="main.js"></script>
+<script>
+function scrollToPlanet(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
+</body>
+</html>

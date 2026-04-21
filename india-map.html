@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>India Map | School Atlas</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    #imap { height: 580px; }
+    .leaflet-popup-content b { color: #0B6E4F; }
+    .leaflet-popup-content .hin { color: #FF6B35; font-size: 0.83rem; }
+    .leaflet-popup-content .prow { font-size: 0.8rem; margin-top: 3px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">🗺️</span>
+      <div><h1>School Atlas</h1><span class="sub">विद्यालय एटलस • Classes 1–5</span></div>
+    </a>
+    <nav class="main-nav">
+      <a href="index.html"        class="nav-link">🏠 Home</a>
+      <a href="world-map.html"    class="nav-link">🌍 World Map</a>
+      <a href="india-map.html"    class="nav-link active">🇮🇳 India Map</a>
+      <a href="flags.html"        class="nav-link">🚩 Flags</a>
+      <a href="capitals.html"     class="nav-link">🏛️ Capitals</a>
+      <a href="rivers.html"       class="nav-link">🌊 Rivers</a>
+      <a href="solar-system.html" class="nav-link">🪐 Solar System</a>
+      <a href="seven-wonders.html" class="nav-link">🗿 7 Wonders</a>
+      <a href="quiz.html"         class="nav-link">🧩 Quiz</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-header">
+  <h2>🇮🇳 India Map</h2>
+  <p class="hin">भारत का मानचित्र</p>
+  <p>Click any marker to see state / UT name and capital! • मार्कर पर क्लिक करें!</p>
+</div>
+
+<div class="map-wrap">
+  <div class="map-btns">
+    <button class="mbtn active" onclick="flyReg(22,80,5,'All India')">🇮🇳 All India</button>
+    <button class="mbtn" onclick="flyReg(28,77,7,'North')">⬆️ North</button>
+    <button class="mbtn" onclick="flyReg(22,80,6,'Central')">🎯 Central</button>
+    <button class="mbtn" onclick="flyReg(13,79,6,'South')">⬇️ South</button>
+    <button class="mbtn" onclick="flyReg(24,86,6,'East')">➡️ East</button>
+    <button class="mbtn" onclick="flyReg(23,72,6,'West')">⬅️ West</button>
+    <button class="mbtn" onclick="flyReg(27,93,6,'Northeast')">🌿 Northeast</button>
+  </div>
+  <div id="imap"></div>
+  <div class="map-tip">💡 Click on 📍 markers to see state name, capital &amp; a fun fact! | मार्कर पर क्लिक करें।</div>
+
+  <!-- India Facts -->
+  <div style="margin-top:22px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
+    <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);border-left:4px solid #FF9933;">
+      <strong>🟠 Saffron in Flag</strong><br><span style="font-size:.83rem;color:var(--text-light);">Stands for courage and sacrifice<br>साहस और बलिदान का प्रतीक</span>
+    </div>
+    <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);border-left:4px solid white;outline:1px solid #eee;">
+      <strong>⚪ White in Flag</strong><br><span style="font-size:.83rem;color:var(--text-light);">Peace and truth • With Ashok Chakra<br>शांति और सत्य • अशोक चक्र के साथ</span>
+    </div>
+    <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);border-left:4px solid #138808;">
+      <strong>🟢 Green in Flag</strong><br><span style="font-size:.83rem;color:var(--text-light);">Faith and prosperity<br>विश्वास और समृद्धि</span>
+    </div>
+    <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);border-left:4px solid #000080;">
+      <strong>🔵 Ashok Chakra</strong><br><span style="font-size:.83rem;color:var(--text-light);">24 spokes — Wheel of Dharma<br>24 तीलियाँ — धर्म चक्र</span>
+    </div>
+    <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);border-left:4px solid var(--primary);">
+      <strong>🏛️ Capital</strong><br><span style="font-size:.83rem;color:var(--text-light);">New Delhi • नई दिल्ली</span>
+    </div>
+    <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);border-left:4px solid var(--orange);">
+      <strong>🗓️ Independence Day</strong><br><span style="font-size:.83rem;color:var(--text-light);">15 August 1947 • 15 अगस्त 1947</span>
+    </div>
+    <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);border-left:4px solid var(--blue);">
+      <strong>📊 States &amp; UTs</strong><br><span style="font-size:.83rem;color:var(--text-light);">28 States + 8 Union Territories<br>28 राज्य + 8 केंद्र शासित प्रदेश</span>
+    </div>
+    <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);border-left:4px solid var(--red);">
+      <strong>🏔️ Highest Peak</strong><br><span style="font-size:.83rem;color:var(--text-light);">Kangchenjunga — 8,586 m<br>कंचनजंगा — 8,586 मीटर</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>🎓 Free Educational Atlas for Primary School Students | Classes 1–5</p>
+  <p>निःशुल्क शैक्षिक एटलस | कक्षा 1–5</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="main.js"></script>
+<script>
+// States & UTs: [name, hindi, capital, capital-hindi, region, fun fact, lat, lng]
+const STATES = [
+  // North
+  ["Uttar Pradesh","उत्तर प्रदेश","Lucknow","लखनऊ","North","UP is the most populous state in India!",27.5706,80.0982],
+  ["Delhi (NCT)","दिल्ली","New Delhi","नई दिल्ली","North","Delhi is the capital of India!",28.6139,77.2090],
+  ["Punjab","पंजाब","Chandigarh","चंडीगढ़","North","Punjab means 'Land of Five Rivers'.",30.7333,76.7794],
+  ["Haryana","हरियाणा","Chandigarh","चंडीगढ़","North","Haryana shares its capital Chandigarh with Punjab.",29.0588,76.0856],
+  ["Himachal Pradesh","हिमाचल प्रदेश","Shimla","शिमला","North","Shimla was the summer capital of British India.",31.1048,77.1734],
+  ["Uttarakhand","उत्तराखंड","Dehradun","देहरादून","North","Uttarakhand is called 'Dev Bhoomi' — Land of Gods!",30.3165,78.0322],
+  ["Jammu & Kashmir","जम्मू और कश्मीर","Srinagar / Jammu","श्रीनगर / जम्मू","North","Kashmir is known as the 'Paradise on Earth'!",33.7782,76.5762],
+  ["Rajasthan","राजस्थान","Jaipur","जयपुर","North","Rajasthan is the largest state in India by area!",26.9124,75.7873],
+  // Central
+  ["Madhya Pradesh","मध्य प्रदेश","Bhopal","भोपाल","Central","MP is called the 'Heart of India'!",23.2599,77.4126],
+  ["Chhattisgarh","छत्तीसगढ़","Raipur","रायपुर","Central","Chhattisgarh means 'Thirty-six Forts'.",21.2514,81.6296],
+  // East
+  ["Bihar","बिहार","Patna","पटना","East","India's first university — Nalanda — was in Bihar!",25.5941,85.1376],
+  ["Jharkhand","झारखंड","Ranchi","रांची","East","Jharkhand means 'Land of Forests'.",23.3441,85.3096],
+  ["West Bengal","पश्चिम बंगाल","Kolkata","कोलकाता","East","Kolkata was the capital of British India for 138 years!",22.5726,88.3639],
+  ["Odisha","ओडिशा","Bhubaneswar","भुवनेश्वर","East","Odisha has over 500 temples in Bhubaneswar!",20.2961,85.8245],
+  // West
+  ["Maharashtra","महाराष्ट्र","Mumbai","मुंबई","West","Mumbai is the financial capital of India!",19.0760,72.8777],
+  ["Gujarat","गुजरात","Gandhinagar","गांधीनगर","West","Mahatma Gandhi was born in Gujarat.",23.2156,72.6369],
+  ["Goa","गोवा","Panaji","पणजी","West","Goa is the smallest state in India by area!",15.2993,74.1240],
+  // South
+  ["Karnataka","कर्नाटक","Bengaluru","बेंगलुरु","South","Bengaluru is known as the Silicon Valley of India!",12.9716,77.5946],
+  ["Tamil Nadu","तमिलनाडु","Chennai","चेन्नई","South","Tamil is one of the world's oldest languages!",13.0827,80.2707],
+  ["Kerala","केरल","Thiruvananthapuram","तिरुवनंतपुरम","South","Kerala has 100% literacy rate!",8.5241,76.9366],
+  ["Andhra Pradesh","आंध्र प्रदेश","Amaravati","अमरावती","South","AP has the longest coastline among all southern states.",16.5062,80.6480],
+  ["Telangana","तेलंगाना","Hyderabad","हैदराबाद","South","Hyderabad is famous for its biryani and the Charminar!",17.3850,78.4867],
+  // Northeast
+  ["Assam","असम","Dispur","दिसपुर","Northeast","Assam produces 50% of India's tea!",26.1433,91.7898],
+  ["Meghalaya","मेघालय","Shillong","शिलांग","Northeast","Meghalaya means 'Abode of Clouds'!",25.5788,91.8933],
+  ["Nagaland","नागालैंड","Kohima","कोहिमा","Northeast","Nagaland is known for the Hornbill Festival.",25.6751,94.1086],
+  ["Manipur","मणिपुर","Imphal","इम्फाल","Northeast","Manipur is known as the 'Jewel of India'.",24.6637,93.9063],
+  ["Tripura","त्रिपुरा","Agartala","अगरतला","Northeast","Tripura is the third smallest state in India.",23.9408,91.9882],
+  ["Arunachal Pradesh","अरुणाचल प्रदेश","Itanagar","ईटानगर","Northeast","Arunachal Pradesh means 'Land of Dawn-Lit Mountains'!",27.0844,93.6053],
+  ["Mizoram","मिजोरम","Aizawl","आइज़ॉल","Northeast","Mizoram means 'Land of the Highlanders'.",23.7271,92.7176],
+  ["Sikkim","सिक्किम","Gangtok","गंगटोक","Northeast","Sikkim is the least populous state in India.",27.5330,88.5122],
+];
+
+const map = L.map('imap').setView([22, 80], 5);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors', maxZoom: 12
+}).addTo(map);
+
+const regionColors = {
+  "North":"#e74c3c","Central":"#f39c12","East":"#3498db",
+  "West":"#27ae60","South":"#9b59b6","Northeast":"#1abc9c"
+};
+
+function makeStateIcon(region) {
+  const col = regionColors[region] || '#0B6E4F';
+  return L.divIcon({
+    html: `<div style="width:12px;height:12px;background:${col};border:2px solid white;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.5);"></div>`,
+    className: '', iconSize: [12, 12], iconAnchor: [6, 6], popupAnchor: [0, -8]
+  });
+}
+
+STATES.forEach(([name, hindi, cap, capHin, region, fact, lat, lng]) => {
+  const col = regionColors[region] || '#0B6E4F';
+  L.marker([lat, lng], { icon: makeStateIcon(region) })
+   .addTo(map)
+   .bindPopup(`
+     <b>${name}</b><br>
+     <span class="hin">${hindi}</span><br>
+     <span class="prow">🏛️ Capital: <strong>${cap}</strong> (${capHin})</span><br>
+     <span class="prow">📍 Region: <span style="color:${col};font-weight:700;">${region}</span></span><br>
+     <span class="prow" style="font-style:italic;color:#555;font-size:.78rem;">⭐ ${fact}</span>
+   `, { maxWidth: 230 });
+});
+
+function flyReg(lat, lng, zoom) {
+  map.flyTo([lat, lng], zoom, { duration: 1.2 });
+  document.querySelectorAll('.mbtn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// Legend
+const legend = L.control({ position: 'bottomright' });
+legend.onAdd = () => {
+  const div = L.DomUtil.create('div', '');
+  div.style.cssText = 'background:white;padding:10px 14px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.15);font-family:Baloo 2,sans-serif;font-size:.78rem;';
+  div.innerHTML = '<strong style="display:block;margin-bottom:6px;">📍 Regions</strong>' +
+    Object.entries(regionColors).map(([r,c]) =>
+      `<div style="display:flex;align-items:center;gap:6px;margin:2px 0;">
+        <span style="width:10px;height:10px;background:${c};border-radius:50%;display:inline-block;"></span>${r}
+      </div>`
+    ).join('');
+  return div;
+};
+legend.addTo(map);
+</script>
+</body>
+</html>

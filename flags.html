@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World Flags | School Atlas</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .flag-modal-overlay {
+      display:none; position:fixed; inset:0;
+      background:rgba(0,0,0,.55); z-index:9000;
+      align-items:center; justify-content:center;
+    }
+    .flag-modal-overlay.open { display:flex; }
+    .flag-modal {
+      background:white; border-radius:20px; padding:32px 28px;
+      max-width:380px; width:90%; text-align:center;
+      box-shadow:0 12px 40px rgba(0,0,0,.3); position:relative;
+    }
+    .fmoji { font-size:6rem; display:block; margin-bottom:12px; }
+    .fm-close {
+      position:absolute; top:12px; right:16px;
+      background:none; border:none; font-size:1.5rem; cursor:pointer;
+    }
+    .cont-filter { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">🗺️</span>
+      <div><h1>School Atlas</h1><span class="sub">विद्यालय एटलस • Classes 1–5</span></div>
+    </a>
+    <nav class="main-nav">
+      <a href="index.html"        class="nav-link">🏠 Home</a>
+      <a href="world-map.html"    class="nav-link">🌍 World Map</a>
+      <a href="india-map.html"    class="nav-link">🇮🇳 India Map</a>
+      <a href="flags.html"        class="nav-link active">🚩 Flags</a>
+      <a href="capitals.html"     class="nav-link">🏛️ Capitals</a>
+      <a href="rivers.html"       class="nav-link">🌊 Rivers</a>
+      <a href="solar-system.html" class="nav-link">🪐 Solar System</a>
+      <a href="seven-wonders.html" class="nav-link">🗿 7 Wonders</a>
+      <a href="quiz.html"         class="nav-link">🧩 Quiz</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-header">
+  <h2>🚩 Flags of the World</h2>
+  <p class="hin">विश्व के झंडे</p>
+  <p>Click any flag to learn more! • किसी भी झंडे पर क्लिक करें!</p>
+</div>
+
+<div class="container">
+  <!-- Search -->
+  <input type="text" id="flag-search" class="search-bar" placeholder="🔍 Search country… देश खोजें…">
+
+  <!-- Continent Filter -->
+  <div class="cont-filter">
+    <button class="mbtn active" onclick="filterCont('All', this)">🌐 All</button>
+    <button class="mbtn" onclick="filterCont('Asia', this)">🌏 Asia</button>
+    <button class="mbtn" onclick="filterCont('Europe', this)">🌍 Europe</button>
+    <button class="mbtn" onclick="filterCont('Africa', this)">🌍 Africa</button>
+    <button class="mbtn" onclick="filterCont('N. America', this)">🌎 N. America</button>
+    <button class="mbtn" onclick="filterCont('S. America', this)">🌎 S. America</button>
+    <button class="mbtn" onclick="filterCont('Oceania', this)">🌏 Oceania</button>
+  </div>
+
+  <div class="flags-grid" id="flags-grid"></div>
+</div>
+
+<!-- Modal -->
+<div class="flag-modal-overlay" id="modal">
+  <div class="flag-modal">
+    <button class="fm-close" onclick="closeModal()">✕</button>
+    <span class="fmoji" id="m-flag">🌍</span>
+    <h2 id="m-name" style="color:var(--primary);margin-bottom:4px;"></h2>
+    <p id="m-hindi" style="color:var(--orange);font-size:1.1rem;margin-bottom:14px;"></p>
+    <div id="m-details" style="font-size:.88rem;line-height:1.8;text-align:left;background:#f9f9f9;border-radius:10px;padding:14px;"></div>
+  </div>
+</div>
+
+<footer>
+  <p>🎓 Free Educational Atlas for Primary School Students | Classes 1–5</p>
+  <p>निःशुल्क शैक्षिक एटलस | कक्षा 1–5</p>
+</footer>
+
+<script src="main.js"></script>
+<script>
+// flag, name, hindi, capital, continent, population, fun fact
+const FLAGS = [
+  ["🇮🇳","India","भारत","New Delhi","Asia","1.4 billion","India has the world's largest democracy!"],
+  ["🇨🇳","China","चीन","Beijing","Asia","1.4 billion","China invented paper, printing, gunpowder and the compass!"],
+  ["🇯🇵","Japan","जापान","Tokyo","Asia","125 million","Japan has over 6,800 islands!"],
+  ["🇷🇺","Russia","रूस","Moscow","Europe","144 million","Russia spans 11 time zones!"],
+  ["🇸🇦","Saudi Arabia","सऊदी अरब","Riyadh","Asia","36 million","Saudi Arabia has the world's largest oil reserves."],
+  ["🇵🇰","Pakistan","पाकिस्तान","Islamabad","Asia","230 million","The K2 mountain is in Pakistan — world's 2nd highest!"],
+  ["🇧🇩","Bangladesh","बांग्लादेश","Dhaka","Asia","170 million","Bangladesh has the world's largest river delta."],
+  ["🇱🇰","Sri Lanka","श्रीलंका","Sri Jayawardenepura Kotte","Asia","22 million","Sri Lanka is called the Pearl of the Indian Ocean."],
+  ["🇳🇵","Nepal","नेपाल","Kathmandu","Asia","30 million","Mount Everest, world's highest peak, is in Nepal!"],
+  ["🇮🇷","Iran","ईरान","Tehran","Asia","85 million","Iran was once known as Persia."],
+  ["🇹🇷","Turkey","तुर्किया","Ankara","Asia","85 million","Istanbul is the only city on two continents!"],
+  ["🇹🇭","Thailand","थाईलैंड","Bangkok","Asia","70 million","Thailand means 'Land of the Free'."],
+  ["🇻🇳","Vietnam","वियतनाम","Hanoi","Asia","98 million","Vietnam is shaped like the letter S!"],
+  ["🇰🇷","South Korea","दक्षिण कोरिया","Seoul","Asia","52 million","South Korea has the fastest internet in the world!"],
+  ["🇮🇩","Indonesia","इंडोनेशिया","Jakarta","Asia","277 million","Indonesia has 17,000 islands — largest archipelago!"],
+  ["🇦🇪","UAE","यूएई","Abu Dhabi","Asia","10 million","Burj Khalifa in UAE is the tallest building in the world!"],
+  ["🇮🇱","Israel","इज़राइल","Jerusalem","Asia","9 million","The Dead Sea is the lowest point on Earth!"],
+  ["🇰🇵","North Korea","उत्तर कोरिया","Pyongyang","Asia","26 million","North Korea has a very unique government system."],
+  ["🇲🇾","Malaysia","मलेशिया","Kuala Lumpur","Asia","33 million","Malaysia is home to some of the world's oldest rainforests."],
+  ["🇵🇭","Philippines","फिलीपींस","Manila","Asia","115 million","Philippines has over 7,000 islands!"],
+  // Europe
+  ["🇬🇧","United Kingdom","यूनाइटेड किंगडम","London","Europe","67 million","The UK invented the sport of football (soccer)!"],
+  ["🇫🇷","France","फ्रांस","Paris","Europe","68 million","France is the most visited country in the world!"],
+  ["🇩🇪","Germany","जर्मनी","Berlin","Europe","84 million","Germany is famous for the Christmas market tradition."],
+  ["🇮🇹","Italy","इटली","Rome","Europe","60 million","Italy is shaped like a boot!"],
+  ["🇪🇸","Spain","स्पेन","Madrid","Europe","47 million","Spain has the world's oldest restaurant!"],
+  ["🇬🇷","Greece","ग्रीस","Athens","Europe","11 million","The Olympic Games started in ancient Greece!"],
+  ["🇳🇱","Netherlands","नीदरलैंड","Amsterdam","Europe","18 million","Many parts of the Netherlands are below sea level!"],
+  ["🇸🇪","Sweden","स्वीडन","Stockholm","Europe","10 million","Sweden invented the zipper and the safety match!"],
+  ["🇳🇴","Norway","नॉर्वे","Oslo","Europe","5 million","Norway has the Northern Lights — Aurora Borealis!"],
+  ["🇨🇭","Switzerland","स्विट्ज़रलैंड","Bern","Europe","8 million","Switzerland has 4 official languages!"],
+  ["🇵🇱","Poland","पोलैंड","Warsaw","Europe","38 million","Copernicus, who discovered Earth orbits the Sun, was Polish!"],
+  ["🇺🇦","Ukraine","यूक्रेन","Kyiv","Europe","41 million","Ukraine is the largest country entirely in Europe."],
+  ["🇵🇹","Portugal","पुर्तगाल","Lisbon","Europe","10 million","Portugal is the oldest country in Europe with unchanged borders."],
+  ["🇨🇿","Czech Republic","चेक गणराज्य","Prague","Europe","11 million","Prague has one of the most beautiful old towns in Europe."],
+  ["🇦🇹","Austria","ऑस्ट्रिया","Vienna","Europe","9 million","Mozart was born in Salzburg, Austria!"],
+  // Africa
+  ["🇪🇬","Egypt","मिस्र","Cairo","Africa","105 million","Egypt is home to the ancient Pyramids and Sphinx!"],
+  ["🇳🇬","Nigeria","नाइजीरिया","Abuja","Africa","220 million","Nigeria is the most populous country in Africa!"],
+  ["🇿🇦","South Africa","दक्षिण अफ्रीका","Pretoria","Africa","60 million","South Africa has 11 official languages!"],
+  ["🇰🇪","Kenya","केन्या","Nairobi","Africa","55 million","Kenya is home to the Great Maasai Mara wildlife reserve."],
+  ["🇪🇹","Ethiopia","इथियोपिया","Addis Ababa","Africa","120 million","Ethiopia is the only African country never colonised!"],
+  ["🇲🇦","Morocco","मोरक्को","Rabat","Africa","37 million","Morocco is the closest African country to Europe."],
+  ["🇹🇿","Tanzania","तंजानिया","Dodoma","Africa","62 million","Mount Kilimanjaro, Africa's highest peak, is in Tanzania!"],
+  ["🇬🇭","Ghana","घाना","Accra","Africa","33 million","Ghana was the first sub-Saharan African country to gain independence."],
+  // Americas
+  ["🇺🇸","United States","संयुक्त राज्य अमेरिका","Washington D.C.","N. America","335 million","The USA has 50 states and the Statue of Liberty!"],
+  ["🇨🇦","Canada","कनाडा","Ottawa","N. America","38 million","Canada has the most lakes in the world!"],
+  ["🇲🇽","Mexico","मेक्सिको","Mexico City","N. America","130 million","Mexico City is built on an ancient Aztec lake!"],
+  ["🇧🇷","Brazil","ब्राजील","Brasília","S. America","214 million","Brazil has the Amazon Rainforest — the world's largest!"],
+  ["🇦🇷","Argentina","अर्जेंटीना","Buenos Aires","S. America","46 million","Argentina is the 8th largest country in the world."],
+  ["🇵🇪","Peru","पेरू","Lima","S. America","33 million","Machu Picchu, an ancient Inca city, is in Peru!"],
+  ["🇨🇱","Chile","चिली","Santiago","S. America","19 million","Chile is 4,300 km long — the world's longest country!"],
+  ["🇨🇴","Colombia","कोलम्बिया","Bogotá","S. America","51 million","Colombia is named after Christopher Columbus."],
+  // Oceania
+  ["🇦🇺","Australia","ऑस्ट्रेलिया","Canberra","Oceania","26 million","Australia has unique animals like the kangaroo and koala!"],
+  ["🇳🇿","New Zealand","न्यूजीलैंड","Wellington","Oceania","5 million","New Zealand was the first country to give women the right to vote!"],
+  ["🇫🇯","Fiji","फिजी","Suva","Oceania","0.9 million","Fiji is made up of over 330 islands!"],
+];
+
+let activeContinent = 'All';
+let searchQ = '';
+
+function render() {
+  const grid = document.getElementById('flags-grid');
+  const filtered = FLAGS.filter(([flag, name, hindi,, cont]) => {
+    const contOk = activeContinent === 'All' || cont === activeContinent;
+    const q = searchQ.toLowerCase();
+    const searchOk = !q || name.toLowerCase().includes(q) || hindi.includes(q) || cont.toLowerCase().includes(q);
+    return contOk && searchOk;
+  });
+  grid.innerHTML = filtered.map(([flag, name, hindi]) =>
+    `<div class="flag-card" onclick="openModal('${flag}','${name.replace(/'/g,"\\'")}','${hindi}')">
+       <span class="fe">${flag}</span>
+       <span class="fn">${name}</span>
+       <span class="fh">${hindi}</span>
+     </div>`
+  ).join('');
+}
+
+function filterCont(cont, btn) {
+  activeContinent = cont;
+  document.querySelectorAll('.cont-filter .mbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function openModal(flag, name, hindi) {
+  const entry = FLAGS.find(f => f[0] === flag && f[1] === name);
+  if (!entry) return;
+  const [f, n, h, capital, cont, pop, fact] = entry;
+  document.getElementById('m-flag').textContent = f;
+  document.getElementById('m-name').textContent = n;
+  document.getElementById('m-hindi').textContent = h;
+  document.getElementById('m-details').innerHTML =
+    `<div>🏛️ <strong>Capital:</strong> ${capital}</div>
+     <div>🌍 <strong>Continent:</strong> ${cont}</div>
+     <div>👥 <strong>Population:</strong> ${pop}</div>
+     <div style="margin-top:8px;font-style:italic;color:#555;">⭐ ${fact}</div>`;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+document.getElementById('flag-search').addEventListener('input', e => {
+  searchQ = e.target.value;
+  render();
+});
+
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal')) closeModal();
+});
+
+render();
+</script>
+</body>
+</html>

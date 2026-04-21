@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Atlas | विद्यालय एटलस</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">🗺️</span>
+      <div>
+        <h1>School Atlas</h1>
+        <span class="sub">विद्यालय एटलस • Classes 1–5</span>
+      </div>
+    </a>
+    <nav class="main-nav">
+      <a href="index.html"       class="nav-link active">🏠 Home</a>
+      <a href="world-map.html"   class="nav-link">🌍 World Map</a>
+      <a href="india-map.html"   class="nav-link">🇮🇳 India Map</a>
+      <a href="flags.html"       class="nav-link">🚩 Flags</a>
+      <a href="capitals.html"    class="nav-link">🏛️ Capitals</a>
+      <a href="rivers.html"      class="nav-link">🌊 Rivers</a>
+      <a href="solar-system.html" class="nav-link">🪐 Solar System</a>
+      <a href="seven-wonders.html" class="nav-link">🗿 7 Wonders</a>
+      <a href="quiz.html"        class="nav-link">🧩 Quiz</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-text">
+      <h2>Explore Our World!</h2>
+      <p class="hero-hin">दुनिया को जानें!</p>
+      <p style="color:var(--text-light);margin-top:6px;">Maps, flags, rivers, planets &amp; quizzes — all free for Classes 1–5!</p>
+      <p style="color:var(--text-light);font-size:.88rem;">कक्षा 1–5 के लिए बिल्कुल मुफ्त!</p>
+    </div>
+    <div class="hero-globe">🌏</div>
+  </div>
+
+  <!-- Section Cards -->
+  <div class="cards-grid">
+    <a href="world-map.html"    class="s-card c-blue">
+      <span class="ci">🌍</span>
+      <h3>World Map</h3>
+      <p>विश्व मानचित्र</p>
+      <span class="tag">🖱️ Interactive</span>
+    </a>
+    <a href="india-map.html"    class="s-card c-orange">
+      <span class="ci">🇮🇳</span>
+      <h3>India Map</h3>
+      <p>भारत का मानचित्र</p>
+      <span class="tag">🖱️ Interactive</span>
+    </a>
+    <a href="flags.html"        class="s-card c-green">
+      <span class="ci">🚩</span>
+      <h3>World Flags</h3>
+      <p>विश्व के झंडे</p>
+      <span class="tag">📖 Reference</span>
+    </a>
+    <a href="capitals.html"     class="s-card c-purple">
+      <span class="ci">🏛️</span>
+      <h3>Capitals</h3>
+      <p>राजधानियाँ</p>
+      <span class="tag">📖 Reference</span>
+    </a>
+    <a href="rivers.html"       class="s-card c-teal">
+      <span class="ci">🌊</span>
+      <h3>Rivers</h3>
+      <p>नदियाँ</p>
+      <span class="tag">📖 Reference</span>
+    </a>
+    <a href="solar-system.html" class="s-card c-dark">
+      <span class="ci">🪐</span>
+      <h3>Solar System</h3>
+      <p>सौर मंडल</p>
+      <span class="tag">🔭 Science</span>
+    </a>
+    <a href="seven-wonders.html" class="s-card c-gold">
+      <span class="ci">🗿</span>
+      <h3>7 Wonders</h3>
+      <p>सात अजूबे</p>
+      <span class="tag">🌟 Culture</span>
+    </a>
+    <a href="quiz.html"          class="s-card c-red">
+      <span class="ci">🧩</span>
+      <h3>Quiz Time!</h3>
+      <p>प्रश्नोत्तरी</p>
+      <span class="tag">🎮 Fun!</span>
+    </a>
+  </div>
+
+  <!-- Fun Fact -->
+  <div class="fact-banner">
+    <div class="fact-inner">
+      <span class="fact-label">🌟 Did You Know? • क्या आप जानते हैं?</span>
+      <span id="fact-text">Loading…</span>
+    </div>
+  </div>
+
+  <!-- Continents Quick Info -->
+  <div class="container" style="padding-top:0">
+    <p class="sec-title">The 7 Continents • 7 महाद्वीप</p>
+    <p class="sec-hindi">पृथ्वी के सात महाद्वीप</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;">
+      <div class="s-card" style="border-top:4px solid #e74c3c;text-decoration:none;cursor:default;">
+        <span class="ci">🌍</span><h3>Africa</h3><p>अफ्रीका • 54 countries</p>
+      </div>
+      <div class="s-card" style="border-top:4px solid #3498db;text-decoration:none;cursor:default;">
+        <span class="ci">🌏</span><h3>Asia</h3><p>एशिया • 49 countries</p>
+      </div>
+      <div class="s-card" style="border-top:4px solid #27ae60;text-decoration:none;cursor:default;">
+        <span class="ci">🌍</span><h3>Europe</h3><p>यूरोप • 44 countries</p>
+      </div>
+      <div class="s-card" style="border-top:4px solid #f39c12;text-decoration:none;cursor:default;">
+        <span class="ci">🌎</span><h3>N. America</h3><p>उत्तर अमेरिका • 23</p>
+      </div>
+      <div class="s-card" style="border-top:4px solid #9b59b6;text-decoration:none;cursor:default;">
+        <span class="ci">🌎</span><h3>S. America</h3><p>दक्षिण अमेरिका • 12</p>
+      </div>
+      <div class="s-card" style="border-top:4px solid #1abc9c;text-decoration:none;cursor:default;">
+        <span class="ci">🌏</span><h3>Australia</h3><p>ऑस्ट्रेलिया • 1 country</p>
+      </div>
+      <div class="s-card" style="border-top:4px solid #95a5a6;text-decoration:none;cursor:default;">
+        <span class="ci">❄️</span><h3>Antarctica</h3><p>अंटार्कटिका • No country</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>🎓 Free Educational Atlas for Primary School Students | Classes 1–5</p>
+  <p>निःशुल्क शैक्षिक एटलस | कक्षा 1–5 | Made with ❤️ for children</p>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>

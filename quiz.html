@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Time! | School Atlas</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .quiz-box {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 30px 28px;
+      max-width: 680px;
+      margin: 0 auto 28px;
+    }
+    .quiz-progress {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 22px;
+    }
+    .progress-bar {
+      flex: 1; height: 10px; background: #e0e0e0; border-radius: 10px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, var(--primary-light), var(--primary));
+      border-radius: 10px; transition: width 0.4s;
+    }
+    .q-number { font-size: .82rem; color: var(--text-light); font-weight: 600; white-space: nowrap; }
+    .q-category {
+      display: inline-block; background: var(--primary); color: white;
+      padding: 3px 14px; border-radius: 20px; font-size: .8rem; font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .q-text { font-size: 1.15rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .q-hindi { font-size: .9rem; color: var(--primary); margin-bottom: 20px; }
+    .options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .opt-btn {
+      background: #f5f5f5; border: 2px solid #e0e0e0;
+      border-radius: var(--radius-sm); padding: 12px 16px;
+      font-size: .95rem; font-weight: 600; color: var(--text);
+      cursor: pointer; text-align: left; transition: all 0.2s;
+      font-family: inherit;
+    }
+    .opt-btn:hover:not(:disabled) { background: #e8f5e9; border-color: var(--primary-light); }
+    .opt-btn.correct { background: #d4edda; border-color: #27ae60; color: #155724; }
+    .opt-btn.wrong   { background: #f8d7da; border-color: #e74c3c; color: #721c24; }
+    .opt-btn:disabled { cursor: default; }
+    .feedback {
+      margin-top: 18px; padding: 14px 18px;
+      border-radius: var(--radius-sm); font-weight: 600; font-size: .95rem;
+      display: none;
+    }
+    .feedback.show { display: block; }
+    .feedback.correct { background: #d4edda; color: #155724; }
+    .feedback.wrong   { background: #f8d7da; color: #721c24; }
+    .next-btn {
+      margin-top: 18px; background: var(--primary); color: white;
+      border: none; border-radius: var(--radius-sm);
+      padding: 12px 28px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; font-family: inherit; transition: background 0.2s;
+      display: none;
+    }
+    .next-btn:hover { background: var(--primary-dark); }
+    .next-btn.show { display: inline-block; }
+    /* Score screen */
+    .score-screen {
+      text-align: center; padding: 40px 20px;
+      display: none;
+    }
+    .score-screen.show { display: block; }
+    .score-emoji { font-size: 5rem; }
+    .score-big { font-size: 2.5rem; font-weight: 800; color: var(--primary); margin: 12px 0; }
+    .score-msg { font-size: 1.1rem; color: var(--text-light); margin-bottom: 24px; }
+    .restart-btn {
+      background: var(--primary); color: white;
+      border: none; border-radius: var(--radius-sm);
+      padding: 14px 32px; font-size: 1.05rem; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+    }
+    .restart-btn:hover { background: var(--primary-dark); }
+    .category-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+    .cat-tab {
+      padding: 8px 20px; border-radius: 20px;
+      border: 2px solid #ddd; background: white;
+      font-weight: 700; font-size: .88rem; cursor: pointer;
+      font-family: inherit; transition: all 0.2s;
+    }
+    .cat-tab.active { background: var(--primary); border-color: var(--primary); color: white; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">🗺️</span>
+      <div>
+        <h1>School Atlas</h1>
+        <span class="sub">विद्यालय एटलस • Classes 1–5</span>
+      </div>
+    </a>
+    <nav class="main-nav">
+      <a href="index.html"        class="nav-link">🏠 Home</a>
+      <a href="world-map.html"    class="nav-link">🌍 World Map</a>
+      <a href="india-map.html"    class="nav-link">🇮🇳 India Map</a>
+      <a href="flags.html"        class="nav-link">🚩 Flags</a>
+      <a href="capitals.html"     class="nav-link">🏛️ Capitals</a>
+      <a href="rivers.html"       class="nav-link">🌊 Rivers</a>
+      <a href="solar-system.html" class="nav-link">🪐 Solar System</a>
+      <a href="seven-wonders.html" class="nav-link">🗿 7 Wonders</a>
+      <a href="quiz.html"         class="nav-link active">🧩 Quiz</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero" style="background:linear-gradient(135deg,#6c3483,#a569bd);">
+    <div class="hero-text">
+      <h2>Quiz Time! 🧩</h2>
+      <p class="hero-hin">प्रश्नोत्तरी का समय!</p>
+      <p style="color:rgba(255,255,255,.85);margin-top:6px;">Test your knowledge of the world — Maps, Capitals, Flags & more!</p>
+      <p style="color:rgba(255,255,255,.7);font-size:.88rem;">दुनिया के बारे में अपनी जानकारी जाँचें!</p>
+    </div>
+    <div class="hero-globe">🏆</div>
+  </div>
+
+  <div class="container">
+    <!-- Category selector -->
+    <p class="sec-title">Choose a Category • श्रेणी चुनें</p>
+    <div class="category-tabs" id="cat-tabs">
+      <button class="cat-tab active" data-cat="all">🌍 All Topics</button>
+      <button class="cat-tab" data-cat="india">🇮🇳 India</button>
+      <button class="cat-tab" data-cat="world">🌐 World</button>
+      <button class="cat-tab" data-cat="planets">🪐 Planets</button>
+      <button class="cat-tab" data-cat="rivers">🌊 Rivers</button>
+      <button class="cat-tab" data-cat="wonders">🗿 Wonders</button>
+    </div>
+
+    <!-- Quiz area -->
+    <div class="quiz-box" id="quiz-area">
+      <div class="quiz-progress">
+        <span class="q-number" id="q-num">Q 1 / 10</span>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:10%"></div></div>
+        <span class="q-number" id="score-live">⭐ 0</span>
+      </div>
+
+      <div id="q-category" class="q-category">🌍 World</div>
+      <div id="q-text" class="q-text">Loading question...</div>
+      <div id="q-hindi" class="q-hindi"></div>
+
+      <div class="options" id="options"></div>
+
+      <div class="feedback" id="feedback"></div>
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next Question →</button>
+    </div>
+
+    <!-- Score screen -->
+    <div class="quiz-box score-screen" id="score-screen">
+      <div class="score-emoji" id="score-emoji">🏆</div>
+      <div class="score-big" id="score-big">8 / 10</div>
+      <div class="score-msg" id="score-msg">Great job!</div>
+      <p style="color:var(--text-light);margin-bottom:24px;font-size:.9rem;" id="score-hindi"></p>
+      <button class="restart-btn" onclick="restartQuiz()">🔄 Play Again</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>🎓 Free Educational Atlas for Primary School Students | Classes 1–5</p>
+  <p>निःशुल्क शैक्षिक एटलस | कक्षा 1–5 | Made with ❤️ for children</p>
+</footer>
+
+<script src="main.js"></script>
+<script>
+const ALL_QUESTIONS = [
+  // India
+  { cat:'india', q:'What is the capital of India?', hi:'भारत की राजधानी क्या है?', opts:['Mumbai','New Delhi','Kolkata','Chennai'], ans:1 },
+  { cat:'india', q:'Which river is the longest in India?', hi:'भारत की सबसे लंबी नदी कौन सी है?', opts:['Yamuna','Brahmaputra','Ganga','Godavari'], ans:2 },
+  { cat:'india', q:'India became independent on which date?', hi:'भारत किस तारीख को स्वतंत्र हुआ?', opts:['26 Jan 1950','15 Aug 1947','2 Oct 1869','14 Nov 1889'], ans:1 },
+  { cat:'india', q:'Which is the tallest mountain in India?', hi:'भारत की सबसे ऊँची चोटी कौन सी है?', opts:['K2','Kanchenjunga','Nanda Devi','Annapurna'], ans:1 },
+  { cat:'india', q:'How many states are there in India?', hi:'भारत में कितने राज्य हैं?', opts:['25','28','29','30'], ans:1 },
+  { cat:'india', q:'The Taj Mahal is located in which city?', hi:'ताज महल किस शहर में है?', opts:['Delhi','Jaipur','Agra','Lucknow'], ans:2 },
+  { cat:'india', q:'Which ocean surrounds India on three sides?', hi:'भारत के तीन तरफ कौन सा महासागर है?', opts:['Pacific','Atlantic','Indian','Arctic'], ans:2 },
+  // World
+  { cat:'world', q:'What is the largest country in the world by area?', hi:'क्षेत्रफल में दुनिया का सबसे बड़ा देश?', opts:['USA','China','Russia','Canada'], ans:2 },
+  { cat:'world', q:'How many continents are there on Earth?', hi:'पृथ्वी पर कितने महाद्वीप हैं?', opts:['5','6','7','8'], ans:2 },
+  { cat:'world', q:'Which is the smallest country in the world?', hi:'दुनिया का सबसे छोटा देश कौन सा है?', opts:['Monaco','San Marino','Vatican City','Maldives'], ans:2 },
+  { cat:'world', q:'Which is the largest ocean in the world?', hi:'दुनिया का सबसे बड़ा महासागर कौन सा है?', opts:['Atlantic','Indian','Arctic','Pacific'], ans:3 },
+  { cat:'world', q:'What is the capital of France?', hi:'फ्रांस की राजधानी क्या है?', opts:['Berlin','Paris','Rome','Madrid'], ans:1 },
+  { cat:'world', q:'Which is the longest river in the world?', hi:'दुनिया की सबसे लंबी नदी कौन सी है?', opts:['Amazon','Nile','Yangtze','Mississippi'], ans:1 },
+  { cat:'world', q:'How many countries are there in Africa?', hi:'अफ्रीका में कितने देश हैं?', opts:['44','54','64','74'], ans:1 },
+  // Planets
+  { cat:'planets', q:'Which is the largest planet in our Solar System?', hi:'सौर मंडल का सबसे बड़ा ग्रह?', opts:['Saturn','Uranus','Neptune','Jupiter'], ans:3 },
+  { cat:'planets', q:'How many planets are in our Solar System?', hi:'हमारे सौर मंडल में कितने ग्रह हैं?', opts:['7','8','9','10'], ans:1 },
+  { cat:'planets', q:'Which planet is closest to the Sun?', hi:'सूर्य के सबसे नज़दीक कौन सा ग्रह है?', opts:['Venus','Earth','Mars','Mercury'], ans:3 },
+  { cat:'planets', q:'Which planet is known as the Red Planet?', hi:'लाल ग्रह किसे कहते हैं?', opts:['Venus','Jupiter','Mars','Saturn'], ans:2 },
+  { cat:'planets', q:'Which planet has rings around it?', hi:'किस ग्रह के चारों ओर छल्ले हैं?', opts:['Jupiter','Mars','Saturn','Uranus'], ans:2 },
+  { cat:'planets', q:'What is the name of Earth\'s natural satellite?', hi:'पृथ्वी के प्राकृतिक उपग्रह का नाम?', opts:['Sun','Moon','Pluto','Mars'], ans:1 },
+  // Rivers
+  { cat:'rivers', q:'Which is the longest river in the world?', hi:'दुनिया की सबसे लंबी नदी?', opts:['Amazon','Congo','Nile','Yangtze'], ans:2 },
+  { cat:'rivers', q:'Which river flows through Egypt?', hi:'किस नदी के किनारे मिस्र है?', opts:['Amazon','Congo','Thames','Nile'], ans:3 },
+  { cat:'rivers', q:'The River Ganga flows into which ocean?', hi:'गंगा नदी किस महासागर में मिलती है?', opts:['Pacific','Atlantic','Bay of Bengal','Arabian Sea'], ans:2 },
+  { cat:'rivers', q:'Which is the longest river in South America?', hi:'दक्षिण अमेरिका की सबसे लंबी नदी?', opts:['Nile','Amazon','Mississippi','Yangtze'], ans:1 },
+  // Wonders
+  { cat:'wonders', q:'In which country is the Taj Mahal located?', hi:'ताज महल किस देश में है?', opts:['China','India','Egypt','Italy'], ans:1 },
+  { cat:'wonders', q:'The Great Wall of China is approximately how long?', hi:'चीन की दीवार लगभग कितनी लंबी है?', opts:['1,000 km','5,000 km','21,000 km','50,000 km'], ans:2 },
+  { cat:'wonders', q:'Which wonder is found in Peru?', hi:'पेरू में कौन सा अजूबा है?', opts:['Petra','Colosseum','Machu Picchu','Chichen Itza'], ans:2 },
+  { cat:'wonders', q:'The Roman Colosseum is in which country?', hi:'रोमन कोलोसियम किस देश में है?', opts:['Greece','France','Spain','Italy'], ans:3 },
+  { cat:'wonders', q:'Which wonder is called the "Rose City"?', hi:'किस अजूबे को "गुलाबी शहर" कहते हैं?', opts:['Machu Picchu','Petra','Chichen Itza','Taj Mahal'], ans:1 },
+];
+
+let questions = [];
+let current = 0;
+let score = 0;
+let answered = false;
+let selectedCat = 'all';
+
+const CAT_ICONS = { india:'🇮🇳', world:'🌐', planets:'🪐', rivers:'🌊', wonders:'🗿', all:'🌍' };
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function loadQuestions(cat) {
+  const pool = cat === 'all' ? ALL_QUESTIONS : ALL_QUESTIONS.filter(q => q.cat === cat);
+  questions = shuffle(pool).slice(0, 10);
+  current = 0; score = 0;
+}
+
+function showQuestion() {
+  answered = false;
+  const q = questions[current];
+  const total = questions.length;
+
+  document.getElementById('q-num').textContent = `Q ${current + 1} / ${total}`;
+  document.getElementById('progress-fill').style.width = `${((current + 1) / total) * 100}%`;
+  document.getElementById('score-live').textContent = `⭐ ${score}`;
+  document.getElementById('q-category').textContent = `${CAT_ICONS[q.cat] || '🌍'} ${q.cat.charAt(0).toUpperCase() + q.cat.slice(1)}`;
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('q-hindi').textContent = q.hi;
+
+  const opts = document.getElementById('options');
+  opts.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(i, q.ans);
+    opts.appendChild(btn);
+  });
+
+  document.getElementById('feedback').classList.remove('show', 'correct', 'wrong');
+  document.getElementById('next-btn').classList.remove('show');
+}
+
+function selectAnswer(chosen, correct) {
+  if (answered) return;
+  answered = true;
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach((b, i) => {
+    b.disabled = true;
+    if (i === correct) b.classList.add('correct');
+    else if (i === chosen) b.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('feedback');
+  if (chosen === correct) {
+    score++;
+    fb.textContent = '✅ Correct! शाबाश! Well done!';
+    fb.className = 'feedback correct show';
+  } else {
+    fb.textContent = `❌ Oops! The correct answer is: ${questions[current].opts[correct]}`;
+    fb.className = 'feedback wrong show';
+  }
+  document.getElementById('score-live').textContent = `⭐ ${score}`;
+  document.getElementById('next-btn').classList.add('show');
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    showScore();
+  } else {
+    showQuestion();
+  }
+}
+
+function showScore() {
+  document.getElementById('quiz-area').style.display = 'none';
+  const ss = document.getElementById('score-screen');
+  ss.classList.add('show');
+
+  const total = questions.length;
+  const pct = score / total;
+  let emoji, msg, hindi;
+  if (pct === 1)         { emoji = '🏆'; msg = 'Perfect Score! Brilliant!';         hindi = 'शत-प्रतिशत! बहुत शानदार!'; }
+  else if (pct >= 0.8)   { emoji = '🌟'; msg = 'Excellent! Almost perfect!';         hindi = 'उत्कृष्ट! लगभग सही!'; }
+  else if (pct >= 0.6)   { emoji = '👍'; msg = 'Good job! Keep practising!';         hindi = 'अच्छा किया! अभ्यास जारी रखो!'; }
+  else if (pct >= 0.4)   { emoji = '📚'; msg = 'Nice try! Read more and try again.'; hindi = 'अच्छी कोशिश! और पढ़ो और फिर कोशिश करो!'; }
+  else                   { emoji = '💪'; msg = 'Keep going! You\'ll do better next time.'; hindi = 'हार मत मानो! अगली बार बेहतर करोगे।'; }
+
+  document.getElementById('score-emoji').textContent = emoji;
+  document.getElementById('score-big').textContent = `${score} / ${total}`;
+  document.getElementById('score-msg').textContent = msg;
+  document.getElementById('score-hindi').textContent = hindi;
+}
+
+function restartQuiz() {
+  document.getElementById('quiz-area').style.display = '';
+  document.getElementById('score-screen').classList.remove('show');
+  loadQuestions(selectedCat);
+  showQuestion();
+}
+
+// Category tab logic
+document.getElementById('cat-tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.cat-tab');
+  if (!btn) return;
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedCat = btn.dataset.cat;
+  restartQuiz();
+});
+
+// Start!
+loadQuestions('all');
+showQuestion();
+</script>
+</body>
+</html>

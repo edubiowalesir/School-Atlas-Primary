@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7 Wonders of the World | School Atlas</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .wonder-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      transition: box-shadow 0.2s, transform 0.2s;
+      margin-bottom: 18px;
+    }
+    .wonder-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-3px); }
+    .wonder-num {
+      min-width: 48px; height: 48px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: 800; color: white;
+      flex-shrink: 0;
+    }
+    .wonder-body h3 { font-size: 1.15rem; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+    .wonder-body .hindi { font-size: .9rem; color: var(--primary); font-weight: 600; margin-bottom: 6px; }
+    .wonder-body p { font-size: .88rem; color: var(--text-light); line-height: 1.5; }
+    .wonder-body .location {
+      display: inline-block; margin-top: 8px;
+      background: #f0f0f0; border-radius: 20px;
+      padding: 2px 12px; font-size: .8rem; color: var(--text);
+    }
+    .colors { background: linear-gradient(135deg, #e74c3c, #f39c12, #27ae60, #3498db, #9b59b6, #e67e22, #1abc9c); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">🗺️</span>
+      <div>
+        <h1>School Atlas</h1>
+        <span class="sub">विद्यालय एटलस • Classes 1–5</span>
+      </div>
+    </a>
+    <nav class="main-nav">
+      <a href="index.html"        class="nav-link">🏠 Home</a>
+      <a href="world-map.html"    class="nav-link">🌍 World Map</a>
+      <a href="india-map.html"    class="nav-link">🇮🇳 India Map</a>
+      <a href="flags.html"        class="nav-link">🚩 Flags</a>
+      <a href="capitals.html"     class="nav-link">🏛️ Capitals</a>
+      <a href="rivers.html"       class="nav-link">🌊 Rivers</a>
+      <a href="solar-system.html" class="nav-link">🪐 Solar System</a>
+      <a href="seven-wonders.html" class="nav-link active">🗿 7 Wonders</a>
+      <a href="quiz.html"         class="nav-link">🧩 Quiz</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero" style="background:linear-gradient(135deg,#c0392b,#f39c12);">
+    <div class="hero-text">
+      <h2>7 Wonders of the World</h2>
+      <p class="hero-hin">दुनिया के सात अजूबे</p>
+      <p style="color:rgba(255,255,255,.85);margin-top:6px;">Incredible structures built by humans across the world!</p>
+      <p style="color:rgba(255,255,255,.7);font-size:.88rem;">इंसानों द्वारा बनाए गए अद्भुत निर्माण!</p>
+    </div>
+    <div class="hero-globe">🗿</div>
+  </div>
+
+  <div class="container">
+    <p class="sec-title">The New Seven Wonders • नए सात अजूबे</p>
+    <p class="sec-hindi">2007 में दुनिया भर के लोगों ने मतदान करके इन्हें चुना</p>
+
+    <div class="wonder-card">
+      <div class="wonder-num" style="background:#e74c3c;">1</div>
+      <div class="wonder-body">
+        <h3>🇨🇳 Great Wall of China</h3>
+        <div class="hindi">चीन की महान दीवार</div>
+        <p>The longest wall in the world! It stretches over 21,000 km across northern China. Built to protect ancient China from enemies. It took hundreds of years and millions of workers to build.</p>
+        <span class="location">📍 China • चीन</span>
+      </div>
+    </div>
+
+    <div class="wonder-card">
+      <div class="wonder-num" style="background:#e67e22;">2</div>
+      <div class="wonder-body">
+        <h3>🇮🇳 Taj Mahal</h3>
+        <div class="hindi">ताज महल</div>
+        <p>A beautiful white marble palace in Agra, India. Built by Mughal Emperor Shah Jahan in memory of his wife Mumtaz Mahal. It is a symbol of love and one of the finest examples of Mughal architecture.</p>
+        <span class="location">📍 Agra, India • आगरा, भारत</span>
+      </div>
+    </div>
+
+    <div class="wonder-card">
+      <div class="wonder-num" style="background:#f1c40f;color:#333;">3</div>
+      <div class="wonder-body">
+        <h3>🇧🇷 Christ the Redeemer</h3>
+        <div class="hindi">क्राइस्ट द रिडीमर</div>
+        <p>A giant statue of Jesus Christ standing 38 metres tall on top of Mount Corcovado in Rio de Janeiro. It overlooks the entire city and is a symbol of peace and welcome.</p>
+        <span class="location">📍 Rio de Janeiro, Brazil • ब्राज़ील</span>
+      </div>
+    </div>
+
+    <div class="wonder-card">
+      <div class="wonder-num" style="background:#27ae60;">4</div>
+      <div class="wonder-body">
+        <h3>🇵🇪 Machu Picchu</h3>
+        <div class="hindi">माचू पिच्चू</div>
+        <p>An ancient Inca city high up in the Andes Mountains of Peru. Built around 1450, it was hidden in the clouds for centuries. It has temples, palaces, and homes made of perfectly fitted stones.</p>
+        <span class="location">📍 Peru • पेरू</span>
+      </div>
+    </div>
+
+    <div class="wonder-card">
+      <div class="wonder-num" style="background:#3498db;">5</div>
+      <div class="wonder-body">
+        <h3>🇲🇽 Chichen Itza</h3>
+        <div class="hindi">चिचेन इत्ज़ा</div>
+        <p>A great Maya city in Mexico with a famous step pyramid called El Castillo. The pyramid has 365 steps — one for each day of the year! Built by the Maya civilisation over 1,000 years ago.</p>
+        <span class="location">📍 Mexico • मेक्सिको</span>
+      </div>
+    </div>
+
+    <div class="wonder-card">
+      <div class="wonder-num" style="background:#9b59b6;">6</div>
+      <div class="wonder-body">
+        <h3>🇮🇹 Roman Colosseum</h3>
+        <div class="hindi">रोमन कोलोसियम</div>
+        <p>The largest ancient amphitheatre ever built, located in Rome, Italy. Completed in 80 AD, it could hold up to 80,000 spectators who came to watch gladiator battles and other events.</p>
+        <span class="location">📍 Rome, Italy • रोम, इटली</span>
+      </div>
+    </div>
+
+    <div class="wonder-card">
+      <div class="wonder-num" style="background:#1abc9c;">7</div>
+      <div class="wonder-body">
+        <h3>🇯🇴 Petra</h3>
+        <div class="hindi">पेट्रा</div>
+        <p>An ancient city in Jordan carved directly into rose-red rock cliffs. It was built by the Nabataean people over 2,000 years ago. Petra is also called the "Rose City" because of the colour of its stone.</p>
+        <span class="location">📍 Jordan • जॉर्डन</span>
+      </div>
+    </div>
+
+    <!-- Bonus: Ancient Wonder -->
+    <div class="fact-banner" style="margin-top:28px;">
+      <div class="fact-inner">
+        <span class="fact-label">🏛️ Bonus Ancient Wonder! • प्राचीन आश्चर्य</span>
+        <span>The Great Pyramid of Giza (Egypt 🇪🇬) is the only surviving wonder of the original Seven Wonders of the Ancient World! गीज़ा का महान पिरामिड!</span>
+      </div>
+    </div>
+
+    <!-- Fun facts -->
+    <p class="sec-title" style="margin-top:32px;">Fun Facts • रोचक तथ्य</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:16px;">
+      <div class="s-card" style="border-top:4px solid #e74c3c;cursor:default;">
+        <span class="ci">📏</span>
+        <h3>Longest</h3>
+        <p>Great Wall of China is 21,000+ km long — that's half the Earth's circumference!</p>
+      </div>
+      <div class="s-card" style="border-top:4px solid #f39c12;cursor:default;">
+        <span class="ci">🏔️</span>
+        <h3>Highest</h3>
+        <p>Machu Picchu sits at 2,430 metres above sea level in the Andes Mountains.</p>
+      </div>
+      <div class="s-card" style="border-top:4px solid #27ae60;cursor:default;">
+        <span class="ci">🇮🇳</span>
+        <h3>India's Pride</h3>
+        <p>The Taj Mahal is India's wonder! Millions of tourists visit it every year.</p>
+      </div>
+      <div class="s-card" style="border-top:4px solid #3498db;cursor:default;">
+        <span class="ci">🗳️</span>
+        <h3>People's Choice</h3>
+        <p>Over 100 million people worldwide voted to select the New Seven Wonders in 2007!</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>🎓 Free Educational Atlas for Primary School Students | Classes 1–5</p>
+  <p>निःशुल्क शैक्षिक एटलस | कक्षा 1–5 | Made with ❤️ for children</p>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
